@@ -1,25 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { apiRequest, FALLBACK_PROGRAMS, ProgramItem } from '../../lib/api';
+import React, { useState } from 'react';
+import Reveal from '../../components/Reveal';
+import { FALLBACK_PROGRAMS, ProgramItem } from '../../lib/api';
 
 export default function OfertaAcademicaPage() {
-  const [programs, setPrograms] = useState<ProgramItem[]>(FALLBACK_PROGRAMS);
+  const [programs] = useState<ProgramItem[]>(FALLBACK_PROGRAMS);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [expandedSlug, setExpandedSlug] = useState<string | null>(null);
+  const [collapsedSlugs, setCollapsedSlugs] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    apiRequest<{ programs: ProgramItem[] }>('/public/programs')
-      .then((res) => {
-        if (res.programs?.length > 0) {
-          setPrograms(res.programs);
-        }
-      })
-      .catch(() => {
-        // Mantiene catálogo de respaldo con las 9 Ingenierías de TESE
-      });
-  }, []);
+  const toggleCollapse = (slug: string) => {
+    setCollapsedSlugs((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  };
 
   const filtered = programs.filter((p) => {
     if (!searchQuery.trim()) return true;
@@ -35,134 +28,151 @@ export default function OfertaAcademicaPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-10">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-iinicia-primary">
-            Tecnológico de Estudios Superiores de Ecatepec · TESE
-          </span>
-          <h1 className="text-4xl font-extrabold text-slate-900 mt-1">
-            Oferta Académica: 9 Ingenierías
-          </h1>
-          <p className="text-slate-600 mt-2 max-w-2xl">
-            Consulta el plan de estudios completo por semestre (Semestre 1 a
-            Semestre 9) de nuestras carreras de ingeniería e inscríbete desde el
-            portal.
-          </p>
-        </div>
-
-        {/* Buscador por carrera o materia */}
-        <div className="w-full md:w-80">
-          <label
-            htmlFor="search-carrera"
-            className="block text-xs font-bold uppercase text-slate-600 mb-1"
+    <div className="bg-[#e8f4fd] min-h-screen py-12 px-4 sm:px-6 lg:px-8 space-y-10 overflow-hidden">
+      <Reveal variant="up">
+        <div className="max-w-7xl mx-auto bg-white rounded-2xl px-6 py-4 shadow-sm border border-sky-100 text-sm text-slate-600 transition duration-300 hover:shadow-md">
+          Tu educación IINICIA hoy, estés donde estés. Especialízate en la rama de{' '}
+          <strong className="text-slate-900">Informática y Sistemas</strong>.{' '}
+          <Link
+            href="/registro"
+            className="font-extrabold text-[#0066ff] hover:underline"
           >
-            Buscar ingeniería o asignatura
-          </label>
-          <input
-            id="search-carrera"
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Ej. Mecatrónica, Robótica, Reactores..."
-            className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-iinicia-teal"
-          />
+            Sé parte de NOSOTROS
+          </Link>
+          .
         </div>
-      </div>
+      </Reveal>
 
-      <div className="grid grid-cols-1 gap-8">
-        {filtered.map((prog, idx) => {
-          const isExpanded = expandedSlug === prog.slug;
-          return (
-            <article
-              key={prog.id}
-              className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="space-y-2 max-w-3xl">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-teal-50 text-iinicia-primary border border-teal-200">
-                      Ingeniería #{idx + 1} · {prog.duration}
-                    </span>
-                    <span className="text-xs font-mono text-slate-500">
-                      Clave: {prog.code}
-                    </span>
-                    <span className="text-xs text-slate-500">
-                      Modalidad: {prog.modality}
-                    </span>
-                  </div>
+      <div className="max-w-7xl mx-auto bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-100 space-y-10">
+        <Reveal>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-6">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#0066ff]">
+                Universidad IINICIA · Rama de Informática y Sistemas
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+                Catálogo de Cursos en Informática y Sistemas
+              </h1>
+              <p className="text-sm text-slate-600 mt-2 max-w-2xl">
+                Consulta el temario completo por módulos prácticos (Módulo 1 al
+                Módulo 4) de nuestros cursos especializados en desarrollo de
+                software, ciberseguridad, IA, cloud, bases de datos y redes.
+              </p>
+            </div>
 
-                  <h2 className="text-2xl font-extrabold text-slate-900">
-                    {prog.title}
-                  </h2>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    {prog.summary}
-                  </p>
-                </div>
+            <div className="w-full md:w-80">
+              <label
+                htmlFor="search-curso"
+                className="block text-xs font-bold uppercase text-slate-600 mb-1"
+              >
+                Buscar curso o tecnología
+              </label>
+              <input
+                id="search-curso"
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Ej. React, Python, Ciberseguridad, SQL, Docker..."
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0066ff] transition"
+              />
+            </div>
+          </div>
+        </Reveal>
 
-                <div className="flex flex-wrap items-center gap-3 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setExpandedSlug(isExpanded ? null : prog.slug)
-                    }
-                    className="px-4 py-2.5 rounded-xl text-xs font-bold border border-slate-300 text-slate-700 hover:bg-slate-100 transition"
-                  >
-                    {isExpanded
-                      ? '▲ Ocultar los 9 semestres'
-                      : '▼ Desplegar los 9 semestres'}
-                  </button>
-                  <Link
-                    href={`/oferta-academica/${prog.slug}`}
-                    className="px-4 py-2.5 rounded-xl text-xs font-bold bg-iinicia-primary text-white hover:bg-teal-900 transition"
-                  >
-                    Ver ficha completa →
-                  </Link>
-                  <Link
-                    href="/registro"
-                    className="px-4 py-2.5 rounded-xl text-xs font-bold bg-iinicia-teal text-slate-950 hover:bg-teal-400 transition"
-                  >
-                    Inscribirme
-                  </Link>
-                </div>
-              </div>
-
-              {/* Retícula de 9 Semestres Desplegable */}
-              {isExpanded && prog.semesters && (
-                <div className="pt-4 border-t border-slate-200">
-                  <h3 className="text-sm font-bold uppercase text-iinicia-primary mb-4">
-                    Mapa Curricular Oficial ({prog.title} — 9 Semestres)
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {prog.semesters.map((sem) => (
-                      <div
-                        key={sem.semester}
-                        className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2"
-                      >
-                        <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
-                          <span className="font-extrabold text-sm text-iinicia-navy">
-                            {sem.title}
-                          </span>
-                          <span className="text-[11px] font-semibold text-slate-500">
-                            {sem.subjects.length}{' '}
-                            {sem.subjects.length === 1
-                              ? 'materia'
-                              : 'materias'}
-                          </span>
-                        </div>
-                        <ul className="text-xs text-slate-700 space-y-1 list-disc pl-4">
-                          {sem.subjects.map((sub) => (
-                            <li key={sub}>{sub}</li>
-                          ))}
-                        </ul>
+        <div className="grid grid-cols-1 gap-6">
+          {filtered.map((prog, idx) => {
+            const isExpanded = !collapsedSlugs[prog.slug];
+            return (
+              <Reveal key={prog.id} variant="up" delay={idx * 80}>
+                <article className="group card-hover-3d bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="space-y-2 max-w-3xl">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-emerald-500 text-white">
+                          Curso #{idx + 1} · {prog.duration}
+                        </span>
+                        <span className="text-xs font-mono text-slate-500">
+                          Clave: {prog.code}
+                        </span>
+                        <span className="text-xs text-slate-500">
+                          Modalidad: {prog.modality}
+                        </span>
                       </div>
-                    ))}
+
+                      <h2 className="text-2xl font-extrabold text-slate-900 group-hover:text-[#0066ff] transition">
+                        {prog.title}
+                      </h2>
+                      <p className="text-sm text-slate-600 leading-relaxed">
+                        {prog.summary}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => toggleCollapse(prog.slug)}
+                        className="px-4 py-2.5 rounded-full text-xs font-bold border border-slate-300 text-slate-700 hover:bg-slate-100 transition hover:scale-105"
+                      >
+                        {isExpanded
+                          ? '▲ Ocultar módulos'
+                          : '▼ Mostrar los 4 módulos'}
+                      </button>
+                      <Link
+                        href={`/oferta-academica/${prog.slug}`}
+                        className="px-5 py-2.5 rounded-full text-xs font-bold bg-[#2b7de9] hover:bg-[#0066ff] text-white transition hover:scale-105"
+                      >
+                        Ver temario completo →
+                      </Link>
+                      <Link
+                        href="/registro"
+                        className="relative overflow-hidden px-5 py-2.5 rounded-full text-xs font-extrabold bg-[#0066ff] hover:bg-blue-700 text-white shadow-sm transition hover:scale-105"
+                      >
+                        <span className="relative z-10">
+                          Enroll Now / Inscribirme
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/25 to-transparent animate-shine"
+                        />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-            </article>
-          );
-        })}
+
+                  {/* Módulos Visibles por Defecto */}
+                  {isExpanded && prog.semesters && (
+                    <div className="pt-5 border-t border-slate-100 animate-fade-up">
+                      <h3 className="text-xs font-extrabold uppercase text-[#0066ff] mb-4">
+                        Temario Oficial por Módulos ({prog.title})
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {prog.semesters.map((sem) => (
+                          <div
+                            key={sem.semester}
+                            className="module-card-hover p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2"
+                          >
+                            <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                              <span className="font-extrabold text-sm text-slate-900">
+                                {sem.title}
+                              </span>
+                              <span className="text-[11px] font-semibold text-[#0066ff]">
+                                {sem.subjects.length} temas
+                              </span>
+                            </div>
+                            <ul className="text-xs text-slate-700 space-y-1 list-disc pl-4">
+                              {sem.subjects.map((sub) => (
+                                <li key={sub}>{sub}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

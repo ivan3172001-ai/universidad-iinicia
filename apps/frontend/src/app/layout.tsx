@@ -6,9 +6,12 @@ import { AuthProvider } from '../context/AuthContext';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'TESE | Portal Institucional y Campus Virtual (React + Moodle)',
+  title: 'UNIVERSIDAD i² INICIA | Cursos de Informática y Sistemas',
   description:
-    'Portal institucional del Tecnológico de Estudios Superiores de Ecatepec (TESE) con sus 9 Ingenierías, integrado con Supabase Auth, NestJS y Campus Virtual Moodle.',
+    'Portal oficial de UNIVERSIDAD i² INICIA · Instituto de Innovación y Ciencias Aplicadas: Cursos, Certificaciones y Diplomados en Informática, Desarrollo Web, Ciberseguridad, IA, Cloud y Sistemas.',
+  icons: {
+    icon: '/iinicia-logo.png',
+  },
 };
 
 export default function RootLayout({

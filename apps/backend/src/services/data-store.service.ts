@@ -86,6 +86,45 @@ export class DataStoreService {
   // Usuarios preconfigurados para demostrar roles diferenciados (CA-05, CA-08, CA-09)
   private profiles: ProfileRecord[] = [
     {
+      id: '00000000-0000-4000-8000-000000000006',
+      email: 'ivan3172001@gmail.com',
+      first_name: 'Iván',
+      last_name: '(Administrador)',
+      phone: '+52 55 1000 0000',
+      status: 'activo',
+      moodle_user_id: 1001,
+      moodle_sync_status: 'sincronizado',
+      moodle_last_sync_at: '2026-10-01T09:00:00Z',
+      created_at: '2026-10-01T08:00:00Z',
+      updated_at: '2026-10-01T08:00:00Z',
+    },
+    {
+      id: '00000000-0000-4000-8000-000000000007',
+      email: 'negromante.ba@gmail.com',
+      first_name: 'Profesor',
+      last_name: 'Titular (negromante.ba)',
+      phone: '+52 55 1000 0007',
+      status: 'activo',
+      moodle_user_id: 2002,
+      moodle_sync_status: 'sincronizado',
+      moodle_last_sync_at: '2026-10-15T12:00:00Z',
+      created_at: '2026-10-02T09:00:00Z',
+      updated_at: '2026-10-15T12:00:00Z',
+    },
+    {
+      id: '00000000-0000-4000-8000-000000000008',
+      email: 'urielgonzalezvargas25@gmail.com',
+      first_name: 'Uriel',
+      last_name: 'González Vargas',
+      phone: '+52 55 1000 0008',
+      status: 'activo',
+      moodle_user_id: 3003,
+      moodle_sync_status: 'sincronizado',
+      moodle_last_sync_at: '2026-10-16T12:00:00Z',
+      created_at: '2026-10-05T09:00:00Z',
+      updated_at: '2026-10-16T12:00:00Z',
+    },
+    {
       id: '00000000-0000-4000-8000-000000000001',
       email: 'admin@iinicia.edu.mx',
       first_name: 'Elena',
@@ -155,6 +194,21 @@ export class DataStoreService {
   // Relación user_roles (Sección 5.1)
   private userRoles: Array<{ user_id: string; role_code: RoleCode; assigned_at: string }> = [
     {
+      user_id: '00000000-0000-4000-8000-000000000006',
+      role_code: 'admin',
+      assigned_at: '2026-10-01T08:00:00Z',
+    },
+    {
+      user_id: '00000000-0000-4000-8000-000000000007',
+      role_code: 'profesor',
+      assigned_at: '2026-10-02T09:00:00Z',
+    },
+    {
+      user_id: '00000000-0000-4000-8000-000000000008',
+      role_code: 'estudiante',
+      assigned_at: '2026-10-05T09:00:00Z',
+    },
+    {
       user_id: '00000000-0000-4000-8000-000000000001',
       role_code: 'admin',
       assigned_at: '2026-10-01T09:00:00Z',
@@ -181,1010 +235,348 @@ export class DataStoreService {
     },
   ];
 
-  // Oferta académica TESE: 9 Ingenierías con su mapa curricular de 9 semestres (Sección 9.1)
+  // Catálogo de Cursos Especializados en Informática y Sistemas
   private programs: ProgramRecord[] = [
-    {
-      id: '11111111-1111-4111-8111-111111111101',
-      slug: 'ingenieria-mecatronica',
-      code: 'ING-MEC-01',
-      title: 'Ingeniería Mecatrónica',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Enfocada en la integración de mecánica, electrónica y sistemas de control para automatizar procesos.',
-      description:
-        'Forma profesionales en el TESE capaces de integrar diseño mecánico, electrónica de potencia, microcontroladores, PLC y robótica industrial para la automatización de procesos y manufactura avanzada.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Química',
-            'Taller de Ética',
-            'Fundamentos de Investigación',
-            'Dibujo Electromecánico',
-            'Metrología y Normalización',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Álgebra Lineal',
-            'Física',
-            'Programación Básica',
-            'Ciencia e Ingeniería de Materiales',
-            'Estadística y Control de Calidad',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Electromagnetismo',
-            'Estática',
-            'Procesos de Fabricación',
-            'Dinámica',
-            'Desarrollo Sustentable',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Ecuaciones Diferenciales',
-            'Análisis de Circuitos Eléctricos',
-            'Mecánica de Materiales',
-            'Fundamentos de Termodinámica',
-            'Máquinas Eléctricas',
-            'Métodos Numéricos',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Electrónica Analógica',
-            'Análisis y Síntesis de Mecanismos',
-            'Microcontroladores',
-            'Instrumentación',
-            'Taller de Investigación I',
-            'Dinámica de Sistemas',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Electrónica de Potencia',
-            'Diseño de Elementos Mecánicos',
-            'Mantenimiento',
-            'Taller de Investigación II',
-            'Control',
-            'Electrónica Digital',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Robótica',
-            'Controladores Lógicos Programables (PLC)',
-            'Manufactura Avanzada',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Formulación y Evaluación de Proyectos',
-            'Interfases y Redes Industriales',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111102',
-      slug: 'ingenieria-industrial',
-      code: 'ING-IND-02',
-      title: 'Ingeniería Industrial',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Orientada a la optimización de procesos, gestión de calidad, manufactura y logística.',
-      description:
-        'Programa de ingeniería del TESE enfocado en la mejora continua de sistemas productivos, estudio del trabajo, investigación de operaciones, ergonomía, control estadístico de la calidad y cadenas de suministro.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Fundamentos de Investigación',
-            'Taller de Ética',
-            'Química',
-            'Dibujo Industrial',
-            'Taller de Herramientas Intelectuales',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Probabilidad y Estadística',
-            'Análisis de la Realidad Nacional',
-            'Propiedad de los Materiales',
-            'Electricidad y Electrónica Industrial',
-            'Taller de Liderazgo',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Estadística Inferencial I',
-            'Estudio del Trabajo I',
-            'Economía',
-            'Álgebra Lineal',
-            'Metrología y Normalización',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Ecuaciones Diferenciales',
-            'Estadística Inferencial II',
-            'Estudio del Trabajo II',
-            'Investigación de Operaciones I',
-            'Procesos de Fabricación',
-            'Higiene y Seguridad Industrial',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Desarrollo Sustentable',
-            'Administración de Proyectos',
-            'Gestión de Costos',
-            'Investigación de Operaciones II',
-            'Ergonomía',
-            'Control Estadístico de la Calidad',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Taller de Investigación I',
-            'Ingeniería Económica',
-            'Administración del Mantenimiento',
-            'Sistemas de Manufactura',
-            'Diseño de Experimentos',
-            'Logística y Cadenas de Suministro',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Planeación Financiera',
-            'Planeación y Diseño de Instalaciones',
-            'Sistemas de Producción',
-            'Taller de Investigación II',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Formulación y Evaluación de Proyectos',
-            'Relaciones Industriales',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111103',
-      slug: 'ingenieria-quimica',
-      code: 'ING-QUI-03',
-      title: 'Ingeniería Química',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Centrada en la transformación de materias primas, diseño de reactores y termodinámica.',
-      description:
-        'Especializa en procesos químicos industriales, balance de materia y energía, fenómenos de transporte, operaciones unitarias, diseño de reactores y simulación de procesos.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Química Inorgánica',
-            'Taller de Ética',
-            'Fundamentos de Investigación',
-            'Dibujo',
-            'Mecánica Clásica',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Álgebra Lineal',
-            'Química Analítica',
-            'Química Orgánica I',
-            'Probabilidad y Estadística',
-            'Termodinámica',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Química Orgánica II',
-            'Fisicoquímica I',
-            'Balance de Materia y Energía',
-            'Ecuaciones Diferenciales',
-            'Desarrollo Sustentable',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Métodos Numéricos',
-            'Termodinámica',
-            'Fisicoquímica II',
-            'Fenómenos de Transporte I',
-            'Análisis Instrumental',
-            'Programación',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Cinética Química y Biológica',
-            'Operaciones Unitarias I',
-            'Fenómenos de Transporte II',
-            'Taller de Investigación I',
-            'Legislación',
-            'Ingeniería Ambiental',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Diseño de Reactores',
-            'Operaciones Unitarias II',
-            'Dinámica y Control de Procesos',
-            'Taller de Investigación II',
-            'Seguridad e Higiene Industrial',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Simulación de Procesos',
-            'Operaciones Unitarias III',
-            'Síntesis y Optimización de Procesos',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Formulación y Evaluación de Proyectos',
-            'Ingeniería Económica',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111104',
-      slug: 'ingenieria-bioquimica',
-      code: 'ING-BIO-04',
-      title: 'Ingeniería Bioquímica',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Aplicación de procesos biológicos y químicos en las industrias alimentaria y farmacéutica.',
-      description:
-        'Forma profesionales capaces de diseñar, operar y controlar bioprocesos, biorreactores y plantas de procesamiento en las industrias alimentaria, biotecnológica y farmacéutica.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Química Inorgánica',
-            'Biología',
-            'Taller de Ética',
-            'Fundamentos de Investigación',
-            'Dibujo',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Química Analítica',
-            'Física I',
-            'Álgebra Lineal',
-            'Probabilidad y Estadística',
-            'Programación',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Química Orgánica I',
-            'Física II',
-            'Fisicoquímica',
-            'Bioquímica I',
-            'Microbiología',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Ecuaciones Diferenciales',
-            'Química Orgánica II',
-            'Termodinámica',
-            'Bioquímica II',
-            'Microbiología Industrial',
-            'Métodos Numéricos',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Operaciones Unitarias I',
-            'Cinética Química y Biológica',
-            'Taller de Investigación I',
-            'Biología Celular',
-            'Desarrollo Sustentable',
-            'Ingeniería de Bioprocesos',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Operaciones Unitarias II',
-            'Ingeniería de Biorreactores',
-            'Instrumentación y Control',
-            'Taller de Investigación II',
-            'Fenómenos de Transporte',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Operaciones Unitarias III',
-            'Formulación y Evaluación de Proyectos',
-            'Tecnología de Alimentos/Fármacos (según especialidad)',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Ingeniería Económica',
-            'Administración y Legislación',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111105',
-      slug: 'ingenieria-aeronautica',
-      code: 'ING-AER-05',
-      title: 'Ingeniería Aeronáutica',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Diseño, manufactura y mantenimiento de aeronaves y sistemas aeroespaciales.',
-      description:
-        'Prepara ingenieros especializados en aerodinámica, estructuras aeroespaciales, sistemas de propulsión, manufactura aeronáutica, control de vuelo y gestión de operaciones aéreas.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Álgebra Lineal',
-            'Taller de Ética',
-            'Química',
-            'Dibujo Aeronáutico',
-            'Fundamentos de Investigación',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Mecánica Clásica',
-            'Probabilidad y Estadística',
-            'Ciencia de Materiales Aeronáuticos',
-            'Termodinámica',
-            'Programación',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Estática',
-            'Electromagnetismo',
-            'Mecánica de Fluidos',
-            'Ecuaciones Diferenciales',
-            'Desarrollo Sustentable',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Dinámica',
-            'Mecánica de Materiales',
-            'Aerodinámica',
-            'Análisis de Circuitos',
-            'Métodos Numéricos',
-            'Electrónica',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Aerodinámica de Alta Velocidad',
-            'Estructuras Aeronáuticas',
-            'Taller de Investigación I',
-            'Sistemas de Aeronaves',
-            'Propulsión',
-            'Instrumentación Aeronáutica',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Desempeño de Aeronaves',
-            'Diseño de Elementos de Máquinas',
-            'Taller de Investigación II',
-            'Manufactura Aeronáutica',
-            'Dinámica de Vuelo',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Mantenimiento Aeronáutico',
-            'Diseño Aeronáutico',
-            'Control de Vuelo',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Administración de Operaciones Aeronáuticas',
-            'Legislación Aeronáutica',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111106',
-      slug: 'ingenieria-gestion-empresarial',
-      code: 'ING-IGE-06',
-      title: 'Ingeniería en Gestión Empresarial',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Combinación de administración de negocios, finanzas e ingeniería de procesos.',
-      description:
-        'Forma líderes capaces de diseñar organizaciones competitivas mediante gestión financiera, capital humano, sistemas de producción, innovación, mercadotecnia y planeación estratégica.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Fundamentos de Investigación',
-            'Cálculo Diferencial',
-            'Desarrollo Humano',
-            'Fundamentos de Gestión Empresarial',
-            'Física',
-            'Dinámica Social',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Software de Aplicación Ejecutivo',
-            'Cálculo Integral',
-            'Contabilidad Orientada a los Negocios',
-            'Dinámica de la Empresa',
-            'Estadística para la Administración I',
-            'Legislación Laboral',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Marco Legal de las Organizaciones',
-            'Probabilidad y Estadística Descriptiva',
-            'Costos Empresariales',
-            'Habilidades Directivas I',
-            'Economía Empresarial',
-            'Álgebra Lineal',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Ingeniería Económica',
-            'Estadística para la Administración II',
-            'Instrumentos de Presupuestación',
-            'Habilidades Directivas II',
-            'Entorno Macroeconómico',
-            'Investigación de Operaciones',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Finanzas en las Organizaciones',
-            'Diseño Organizacional',
-            'Gestión del Capital Humano',
-            'Taller de Investigación I',
-            'Mercadotecnia',
-            'Desarrollo Sustentable',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Administración de la Salud y Seguridad Ocupacional',
-            'El Emprendedor y la Innovación',
-            'Gestión de la Producción I',
-            'Taller de Investigación II',
-            'Sistemas de Información de Mercadotecnia',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Plan de Negocios',
-            'Gestión de la Producción II',
-            'Calidad Aplicada a la Gestión Empresarial',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Gestión Estratégica',
-            'Cadena de Suministros',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111107',
-      slug: 'ingenieria-electromecanica',
-      code: 'ING-IEM-07',
-      title: 'Ingeniería Electromecánica',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Integración de sistemas eléctricos, mecánicos y térmicos para la industria.',
-      description:
-        'Desarrolla especialistas en instalaciones y subestaciones eléctricas, máquinas eléctricas, sistemas hidráulicos y neumáticos, transferencia de calor, refrigeración y automatización industrial.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Química',
-            'Taller de Ética',
-            'Fundamentos de Investigación',
-            'Dibujo Electromecánico',
-            'Introducción a la Programación',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Álgebra Lineal',
-            'Mecánica Clásica',
-            'Tecnología de los Materiales',
-            'Probabilidad y Estadística',
-            'Metrología y Normalización',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Electricidad y Magnetismo',
-            'Estática',
-            'Procesos de Manufactura',
-            'Electrónica Analógica',
-            'Desarrollo Sustentable',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Ecuaciones Diferenciales',
-            'Dinámica',
-            'Mecánica de Materiales',
-            'Análisis de Circuitos',
-            'Termodinámica',
-            'Métodos Numéricos',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Máquinas Eléctricas',
-            'Mecánica de Fluidos',
-            'Diseño de Elementos de Máquinas',
-            'Instalaciones Eléctricas',
-            'Taller de Investigación I',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Controles Eléctricos',
-            'Transferencia de Calor',
-            'Electrónica Industrial',
-            'Sistemas Hidráulicos y Neumáticos',
-            'Taller de Investigación II',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Refrigeración y Aire Acondicionado',
-            'Subestaciones Eléctricas',
-            'Automatización',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Formulación y Evaluación de Proyectos',
-            'Mantenimiento Industrial',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111108',
-      slug: 'ingenieria-electronica',
-      code: 'ING-IEL-08',
-      title: 'Ingeniería Electrónica',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Diseño de hardware, telecomunicaciones, instrumentación y control analógico/digital.',
-      description:
-        'Enfocada en el diseño de sistemas electrónicos analógicos y digitales, VHDL, microcontroladores, instrumentación, optoelectrónica, telecomunicaciones y control automático.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Cálculo Diferencial',
-            'Física I (Mecánica)',
-            'Química',
-            'Taller de Ética',
-            'Fundamentos de Investigación',
-            'Comunicación Humana',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Física II (Electromagnetismo)',
-            'Álgebra Lineal',
-            'Probabilidad y Estadística',
-            'Programación Estructurada',
-            'Dibujo Asistido por Computadora',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Cálculo Vectorial',
-            'Ecuaciones Diferenciales',
-            'Física de Semiconductores',
-            'Mediciones Eléctricas',
-            'Programación Visual',
-            'Desarrollo Sustentable',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Análisis de Circuitos Eléctricos',
-            'Electrónica Analógica',
-            'Diseño Digital',
-            'Métodos Numéricos',
-            'Máquinas Eléctricas',
-            'Teoría Electromagnética',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Taller de Investigación I',
-            'Amplificadores Operacionales',
-            'Microcontroladores',
-            'Diseño Digital con VHDL',
-            'Instrumentación',
-            'Fundamentos de Telecomunicaciones',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Taller de Investigación II',
-            'Control I',
-            'Electrónica de Potencia',
-            'Optoelectrónica',
-            'Sistemas de Comunicación',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Control II',
-            'PLC y Automatización',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Formulación y Evaluación de Proyectos',
-            'Administración Gerencial',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-    {
-      id: '11111111-1111-4111-8111-111111111109',
-      slug: 'ingenieria-logistica',
-      code: 'ING-LOG-09',
-      title: 'Ingeniería en Logística',
-      type: 'licenciatura',
-      modality: 'Escolarizada y Apoyo en Campus Moodle',
-      duration: '9 Semestres',
-      summary:
-        'Diseño, operación y mejora de cadenas de suministro, transporte y almacenes.',
-      description:
-        'Forma especialistas en gestión de compras, inventarios, almacenes, tráfico y transporte, legislación aduanera, envase y embalaje, simulación logística y redes de suministro globales.',
-      is_active: true,
-      semesters: [
-        {
-          semester: 1,
-          title: 'Semestre 1',
-          subjects: [
-            'Introducción a la Ingeniería en Logística',
-            'Cálculo Diferencial',
-            'Química',
-            'Fundamentos de Investigación',
-            'Taller de Ética',
-            'Economía',
-          ],
-        },
-        {
-          semester: 2,
-          title: 'Semestre 2',
-          subjects: [
-            'Cálculo Integral',
-            'Probabilidad y Estadística',
-            'Álgebra Lineal',
-            'Dinámica Social',
-            'Fundamentos de Administración',
-            'Contabilidad Financiera',
-          ],
-        },
-        {
-          semester: 3,
-          title: 'Semestre 3',
-          subjects: [
-            'Tipología del Producto',
-            'Estadística Inferencial I',
-            'Cálculo Vectorial',
-            'Bases de Datos',
-            'Entorno Macroeconómico',
-            'Costos Logísticos',
-          ],
-        },
-        {
-          semester: 4,
-          title: 'Semestre 4',
-          subjects: [
-            'Legislación Aduanera',
-            'Estadística Inferencial II',
-            'Finanzas',
-            'Investigación de Operaciones I',
-            'Higiene y Seguridad',
-            'Mecánica Clásica',
-          ],
-        },
-        {
-          semester: 5,
-          title: 'Semestre 5',
-          subjects: [
-            'Compras',
-            'Tráfico y Transporte',
-            'Investigación de Operaciones II',
-            'Taller de Investigación I',
-            'Desarrollo Sustentable',
-            'Procesos de Fabricación',
-          ],
-        },
-        {
-          semester: 6,
-          title: 'Semestre 6',
-          subjects: [
-            'Inventarios',
-            'Envase, Empaque y Embalaje',
-            'Modelos de Simulación y Logística',
-            'Taller de Investigación II',
-            'Ingeniería Económica',
-            'Geografía Logística',
-          ],
-        },
-        {
-          semester: 7,
-          title: 'Semestre 7',
-          subjects: [
-            'Almacenes',
-            'Servicio al Cliente',
-            'Formulación y Evaluación de Proyectos',
-            'Materias de Especialidad',
-          ],
-        },
-        {
-          semester: 8,
-          title: 'Semestre 8',
-          subjects: [
-            'Cadena de Suministro',
-            'Diseño de Instalaciones',
-            'Especialidad',
-          ],
-        },
-        {
-          semester: 9,
-          title: 'Semestre 9',
-          subjects: ['Residencia Profesional'],
-        },
-      ],
-    },
-  ];
+  {
+    id: '11111111-1111-4111-8111-111111111101',
+    slug: 'desarrollo-web-fullstack-react-nextjs',
+    code: 'SIS-WEB-101',
+    title: 'Desarrollo Web Full-Stack con React, Next.js y Node.js',
+    type: 'curso',
+    modality: '100% Online · Campus Virtual Moodle',
+    duration: '80 Horas · 4 Módulos',
+    summary:
+      'Domina el desarrollo de aplicaciones web modernas con TypeScript, React, Next.js, APIs REST en NestJS y bases de datos PostgreSQL.',
+    description:
+      'Curso práctico de la rama de Informática y Sistemas enfocado en la construcción de arquitecturas web modernas, componentes reactivos, autenticación segura JWT, integración con Supabase y despliegue en la nube.',
+    is_active: true,
+    semesters: [
+      {
+        semester: 1,
+        title: 'Módulo 1 · Fundamentos Web y TypeScript',
+        subjects: [
+          'Arquitectura Cliente-Servidor y Protocolo HTTP/HTTPS',
+          'HTML5 Semántico, Accesibilidad WCAG 2.2 y CSS3 Moderno',
+          'Diseño Responsivo con Tailwind CSS',
+          'JavaScript ES2024+ y Tipado Estático con TypeScript',
+          'Control de Versiones con Git y Flujos en GitHub',
+        ],
+      },
+      {
+        semester: 2,
+        title: 'Módulo 2 · Frontend Profesional con React y Next.js',
+        subjects: [
+          'Componentes Funcionales, Props y Estado en React 18',
+          'Hooks Avanzados (useState, useEffect, useMemo, Custom Hooks)',
+          'Enrutamiento con Next.js App Router y Server Components',
+          'Manejo de Formularios, Validaciones y Estado Global',
+          'Optimización de Rendimiento y Core Web Vitals',
+        ],
+      },
+      {
+        semester: 3,
+        title: 'Módulo 3 · Backend con Node.js, NestJS y Bases de Datos',
+        subjects: [
+          'Diseño de APIs RESTful y Controladores en NestJS',
+          'Modelado Relacional en PostgreSQL y Supabase',
+          'Autenticación JWT, Roles (RBAC) y Row Level Security (RLS)',
+          'Integración de Servicios Externos y Webhooks',
+          'Pruebas Automatizadas Unitarias y End-to-End (E2E)',
+        ],
+      },
+      {
+        semester: 4,
+        title: 'Módulo 4 · Despliegue Cloud y Proyecto Integrador',
+        subjects: [
+          'Contenedorización de Aplicaciones con Docker y Docker Compose',
+          'Pipelines de Integración y Entrega Continua (CI/CD)',
+          'Monitoreo, Logs de Auditoría y Seguridad OWASP Top 10',
+          'Proyecto Final: Plataforma Web Full-Stack en Producción',
+        ],
+      },
+    ],
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111102',
+    slug: 'ciberseguridad-hacking-etico-proteccion-sistemas',
+    code: 'SIS-SEC-102',
+    title: 'Ciberseguridad, Hacking Ético y Protección de Sistemas',
+    type: 'curso',
+    modality: '100% Online · Laboratorios en Campus Moodle',
+    duration: '70 Horas · 4 Módulos',
+    summary:
+      'Aprende auditoría de seguridad, pruebas de penetración (Pentesting), endurecimiento de servidores Linux/Windows y defensa de redes.',
+    description:
+      'Formación especializada en seguridad informática ofensiva y defensiva para identificar vulnerabilidades, proteger infraestructuras críticas, asegurar aplicaciones web y responder ante incidentes cibernéticos.',
+    is_active: true,
+    semesters: [
+      {
+        semester: 1,
+        title: 'Módulo 1 · Fundamentos de Ciberseguridad y Redes Seguras',
+        subjects: [
+          'Principios CIA (Confidencialidad, Integridad y Disponibilidad)',
+          'Análisis de Tráfico de Red con Wireshark y TCP/IP',
+          'Criptografía Simétrica, Asimétrica, Hashing y Certificados TLS',
+          'Configuración de Firewalls, VPNs y Segmentación de Redes',
+        ],
+      },
+      {
+        semester: 2,
+        title: 'Módulo 2 · Hacking Ético y Pentesting de Sistemas',
+        subjects: [
+          'Metodologías de Reconocimiento y Escaneo con Nmap',
+          'Evaluación de Vulnerabilidades con OpenVAS y Nessus',
+          'Auditoría de Aplicaciones Web (OWASP Top 10, SQLi, XSS, CSRF)',
+          'Laboratorio Práctico en Entornos Controlados (Kali Linux)',
+        ],
+      },
+      {
+        semester: 3,
+        title: 'Módulo 3 · Hardening de Servidores y Seguridad Cloud',
+        subjects: [
+          'Endurecimiento (Hardening) de Servidores Linux y Active Directory',
+          'Seguridad en Contenedores Docker y Entornos Cloud',
+          'Gestión de Identidades, Accesos Privilegiados (IAM) y MFA',
+          'Políticas de Respaldo y Recuperación ante Desastres (DRP)',
+        ],
+      },
+      {
+        semester: 4,
+        title: 'Módulo 4 · Respuesta a Incidentes y Forense Digital',
+        subjects: [
+          'Monitoreo SIEM, Detección de Intrusiones (IDS/IPS) y Logs',
+          'Análisis Forense Digital y Cadena de Custodia',
+          'Normativas Internacionales ISO 27001 y NIST Cybersecurity Framework',
+          'Proyecto Final: Informe Ejecutivo y Técnico de Auditoría',
+        ],
+      },
+    ],
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111103',
+    slug: 'inteligencia-artificial-machine-learning-python',
+    code: 'SIS-IA-103',
+    title: 'Inteligencia Artificial, Machine Learning y Python Aplicado',
+    type: 'curso',
+    modality: '100% Online · Campus Virtual Moodle',
+    duration: '80 Horas · 4 Módulos',
+    summary:
+      'Desarrolla modelos predictivos, redes neuronales, procesamiento de lenguaje natural (NLP) e integración de IA generativa con Python.',
+    description:
+      'Curso práctico de informática avanzada que abarca desde la programación científica en Python y análisis exploratorio de datos hasta el entrenamiento y despliegue de modelos de Machine Learning y LLMs.',
+    is_active: true,
+    semesters: [
+      {
+        semester: 1,
+        title: 'Módulo 1 · Python para Ciencia de Datos e IA',
+        subjects: [
+          'Estructuras de Datos y Programación Orientada a Objetos en Python',
+          'Cálculo Matricial y Vectorización con NumPy',
+          'Manipulación y Limpieza de Datos con Pandas',
+          'Visualización de Datos con Matplotlib y Seaborn',
+        ],
+      },
+      {
+        semester: 2,
+        title: 'Módulo 2 · Machine Learning Supervisado y No Supervisado',
+        subjects: [
+          'Regresión Lineal, Logística y Árboles de Decisión con Scikit-Learn',
+          ' Bosques Aleatorios (Random Forest), SVM y Gradient Boosting',
+          'Clustering (K-Means, DBSCAN) y Reducción de Dimensionalidad (PCA)',
+          'Validación Cruzada, Métricas de Evaluación y Ajuste de Hiperparámetros',
+        ],
+      },
+      {
+        semester: 3,
+        title: 'Módulo 3 · Deep Learning y Redes Neuronales',
+        subjects: [
+          'Arquitectura de Redes Neuronales Artificiales (Perceptrón Multicapa)',
+          'Visión por Computadora con Redes Convolucionales (CNN)',
+          'Procesamiento de Lenguaje Natural (NLP) y Embeddings',
+          'Entrenamiento de Modelos con PyTorch y TensorFlow',
+        ],
+      },
+      {
+        semester: 4,
+        title: 'Módulo 4 · IA Generativa, LLMs y Despliegue de Modelos (MLOps)',
+        subjects: [
+          'Integración de APIs de Modelos de Lenguaje (LLMs) y Prompt Engineering',
+          'Arquitecturas RAG (Retrieval-Augmented Generation) y Bases Vectoriales',
+          'Exposición de Modelos de IA mediante APIs con FastAPI',
+          'Proyecto Final: Sistema Inteligente en Producción',
+        ],
+      },
+    ],
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111104',
+    slug: 'arquitectura-cloud-devops-docker-kubernetes',
+    code: 'SIS-CLD-104',
+    title: 'Arquitectura Cloud, DevOps, Docker y Kubernetes',
+    type: 'curso',
+    modality: '100% Online · Campus Virtual Moodle',
+    duration: '60 Horas · 4 Módulos',
+    summary:
+      'Automatiza despliegues, administra contenedores Docker, orquesta clústeres Kubernetes y diseña infraestructura como código (IaC).',
+    description:
+      'Especialización en ingeniería de sistemas e infraestructura en la nube para automatizar el ciclo de vida del software, garantizar alta disponibilidad y escalar microservicios.',
+    is_active: true,
+    semesters: [
+      {
+        semester: 1,
+        title: 'Módulo 1 · Administración Linux y Contenedores Docker',
+        subjects: [
+          'Administración Avanzada de Sistemas Linux y Scripting en Bash',
+          'Arquitectura de Contenedores, Imágenes y Dockerfiles Optimizados',
+          'Redes, Volúmenes y Orquestación Local con Docker Compose',
+          'Registro de Imágenes y Seguridad en Contenedores',
+        ],
+      },
+      {
+        semester: 2,
+        title: 'Módulo 2 · Integración y Entrega Continua (CI/CD)',
+        subjects: [
+          'Automatización de Pipelines con GitHub Actions y GitLab CI',
+          'Pruebas Automatizadas, Análisis Estático de Código (SonarQube) y Linting',
+          'Estrategias de Despliegue (Blue-Green, Canary y Rolling Updates)',
+          'Gestión de Secretos y Variables de Entorno en Producción',
+        ],
+      },
+      {
+        semester: 3,
+        title: 'Módulo 3 · Orquestación con Kubernetes e Infraestructura Cloud',
+        subjects: [
+          'Arquitectura de Kubernetes: Pods, Deployments, Services e Ingress',
+          'Escalado Automático (HPA), ConfigMaps y Persistent Volumes',
+          'Infraestructura como Código (IaC) con Terraform',
+          'Servicios Cloud (Cómputo, Almacenamiento S3, Redes VPC y Balanceadores)',
+        ],
+      },
+      {
+        semester: 4,
+        title: 'Módulo 4 · Observabilidad, SRE y Alta Disponibilidad',
+        subjects: [
+          'Monitoreo de Métricas con Prometheus y Tableros en Grafana',
+          'Centralización de Logs y Trazabilidad Distribuida',
+          'Ingeniería de Confiabilidad de Sitios (SLIs, SLOs y SLAs)',
+          'Proyecto Final: Clúster Cloud Automatizado con CI/CD',
+        ],
+      },
+    ],
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111105',
+    slug: 'bases-de-datos-sql-postgresql-ingenieria-datos',
+    code: 'SIS-DBA-105',
+    title: 'Bases de Datos SQL, PostgreSQL, Supabase e Ingeniería de Datos',
+    type: 'curso',
+    modality: '100% Online · Campus Virtual Moodle',
+    duration: '60 Horas · 4 Módulos',
+    summary:
+      'Diseña, optimiza y administra bases de datos relacionales y NoSQL, consultas SQL avanzadas, seguridad RLS y pipelines ETL.',
+    description:
+      'Curso enfocado en el modelado de datos empresariales, administración de PostgreSQL, políticas de seguridad a nivel de fila (Row Level Security), indexación de alto rendimiento y arquitecturas de datos.',
+    is_active: true,
+    semesters: [
+      {
+        semester: 1,
+        title: 'Módulo 1 · Modelado Relacional y SQL Fundamental',
+        subjects: [
+          'Diseño de Diagramas Entidad-Relación (DER) y Normalización (1FN a 3FN)',
+          'Lenguaje DDL, DML y Restricciones de Integridad Referencial',
+          'Consultas Avanzadas con JOINs, Subconsultas y Agregaciones',
+          'Vistas, Funciones y Procedimientos Almacenados en PL/pgSQL',
+        ],
+      },
+      {
+        semester: 2,
+        title: 'Módulo 2 · Administración Avanzada de PostgreSQL y Supabase',
+        subjects: [
+          'Transacciones ACID, Control de Concurrencia (MVCC) y Bloqueos',
+          'Triggers, Auditoría Automática y Eventos en Tiempo Real',
+          'Seguridad a Nivel de Fila (Row Level Security - RLS) y Roles',
+          'Respaldo, Restauración (PITR) y Replicación de Bases de Datos',
+        ],
+      },
+      {
+        semester: 3,
+        title: 'Módulo 3 · Optimización de Consultas y Bases NoSQL',
+        subjects: [
+          'Análisis de Planes de Ejecución con EXPLAIN ANALYZE',
+          'Estrategias de Indexación (B-Tree, GIN, GiST y Particionamiento)',
+          'Manejo de Datos Semi-Estructurados JSONB en PostgreSQL',
+          'Introducción a Bases Documentales y Caché en Memoria con Redis',
+        ],
+      },
+      {
+        semester: 4,
+        title: 'Módulo 4 · Pipelines ETL, Data Warehousing y Analítica',
+        subjects: [
+          'Extracción, Transformación y Carga de Datos (ETL / ELT)',
+          'Modelado Dimensional (Esquema Estrella y Copo de Nieve)',
+          'Consultas Analíticas con Window Functions y CTEs Recursivos',
+          'Proyecto Final: Arquitectura de Datos Segura y Escalable',
+        ],
+      },
+    ],
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111106',
+    slug: 'redes-empresariales-servidores-linux-infraestructura',
+    code: 'SIS-NET-106',
+    title: 'Redes Empresariales, Servidores Linux y Administración de Sistemas',
+    type: 'curso',
+    modality: '100% Online · Campus Virtual Moodle',
+    duration: '60 Horas · 4 Módulos',
+    summary:
+      'Configura redes TCP/IP, enrutamiento, VLANs, servidores Linux, servicios DNS/DHCP/Web y virtualización de centros de datos.',
+    description:
+      'Formación integral para administradores de sistemas (SysAdmin) e ingenieros de soporte TI en diseño de redes corporativas, administración de servidores Linux y continuidad operativa.',
+    is_active: true,
+    semesters: [
+      {
+        semester: 1,
+        title: 'Módulo 1 · Arquitectura de Redes TCP/IP y Subnetting',
+        subjects: [
+          'Modelo OSI y Pila de Protocolos TCP/IP',
+          'Direccionamiento IPv4 / IPv6, CIDR y Cálculo de Subredes (VLSM)',
+          'Conmutación Ethernet, Configuración de VLANs y Protocolo Spanning Tree',
+          'Enrutamiento Estático y Dinámico (OSPF) en Entornos Empresariales',
+        ],
+      },
+      {
+        semester: 2,
+        title: 'Módulo 2 · Administración de Servidores Linux (SysAdmin)',
+        subjects: [
+          'Instalación, Sistema de Archivos, Permisos POSIX y LVM en Linux',
+          'Gestión de Usuarios, Grupos, Procesos y Servicios con Systemd',
+          'Acceso Remoto Seguro por SSH, Llaves Criptográficas y Bastion Hosts',
+          'Automatización de Tareas Programadas con Cron y Scripts Bash',
+        ],
+      },
+      {
+        semester: 3,
+        title: 'Módulo 3 · Servicios de Red e Infraestructura Web',
+        subjects: [
+          'Configuración de Servidores DNS, DHCP y NTP',
+          'Servidores Web Nginx y Apache: Reverse Proxy, Balanceo y SSL/TLS',
+          'Servicios de Directorio (LDAP) y Compartición de Archivos en Red',
+          'Virtualización de Servidores e Hipervisores (KVM / Proxmox)',
+        ],
+      },
+      {
+        semester: 4,
+        title: 'Módulo 4 · Monitoreo de Red, Diagnóstico y Alta Disponibilidad',
+        subjects: [
+          'Diagnóstico y Resolución de Problemas de Red (Troubleshooting)',
+          'Monitoreo de Infraestructura con SNMP, Zabbix y Alertamiento',
+          'Redundancia de Enlaces, Balanceo de Carga y Respaldos Automatizados',
+          'Proyecto Final: Diseño e Implementación de Red y Servidores Corporativos',
+        ],
+      },
+    ],
+  },
+];
 
   // Los Dos Cursos de Ejemplo Obligatorios en Moodle (Sección 8.1, CA-08)
   private courseMappings: CourseMappingRecord[] = [
@@ -1299,6 +691,30 @@ export class DataStoreService {
   // Estudiante 2 matriculado en Curso 1 y Curso 2
   private enrollments: EnrollmentRequestRecord[] = [
     {
+      id: 'enr-negro-101',
+      user_id: '00000000-0000-4000-8000-000000000007',
+      course_mapping_id: '22222222-2222-4222-8222-222222222201',
+      moodle_role: 'editingteacher',
+      status: 'sincronizada',
+      authorized_by: '00000000-0000-4000-8000-000000000006',
+      authorized_at: '2026-10-15T12:00:00Z',
+      moodle_synced_at: '2026-10-15T12:01:00Z',
+      notes: 'Titular docente de Curso 1 (TI-101)',
+      created_at: '2026-10-15T11:55:00Z',
+    },
+    {
+      id: 'enr-negro-102',
+      user_id: '00000000-0000-4000-8000-000000000007',
+      course_mapping_id: '22222222-2222-4222-8222-222222222202',
+      moodle_role: 'editingteacher',
+      status: 'sincronizada',
+      authorized_by: '00000000-0000-4000-8000-000000000006',
+      authorized_at: '2026-10-15T12:02:00Z',
+      moodle_synced_at: '2026-10-15T12:03:00Z',
+      notes: 'Titular docente de Curso 2 (WEB-202)',
+      created_at: '2026-10-15T11:58:00Z',
+    },
+    {
       id: 'enr-prof-101',
       user_id: '00000000-0000-4000-8000-000000000002',
       course_mapping_id: '22222222-2222-4222-8222-222222222201',
@@ -1408,18 +824,468 @@ export class DataStoreService {
     },
   ];
 
+  private courseGrades: Array<{
+    moodleCourseId: number;
+    moodleUserId: number;
+    userId: string;
+    name: string;
+    email: string;
+    taskGrade: number;
+    quizGrade: number;
+    progress: number;
+    feedback: string;
+    gradedByEmail: string;
+    updatedAt: string;
+  }> = [
+    {
+      moodleCourseId: 101,
+      moodleUserId: 3001,
+      userId: '00000000-0000-4000-8000-000000000003',
+      name: 'Ana Sofía García',
+      email: 'estudiante1@iinicia.edu.mx',
+      taskGrade: 96,
+      quizGrade: 95,
+      progress: 100,
+      feedback: 'Excelente dominio de arquitectura de TI y segmentación de red.',
+      gradedByEmail: 'profesor@iinicia.edu.mx',
+      updatedAt: '2026-10-16T18:00:00Z',
+    },
+    {
+      moodleCourseId: 101,
+      moodleUserId: 3002,
+      userId: '00000000-0000-4000-8000-000000000004',
+      name: 'Carlos Eduardo López',
+      email: 'estudiante2@iinicia.edu.mx',
+      taskGrade: 92,
+      quizGrade: 94,
+      progress: 90,
+      feedback: 'Muy buen diagnóstico de infraestructura y participación en foro.',
+      gradedByEmail: 'profesor@iinicia.edu.mx',
+      updatedAt: '2026-10-16T18:10:00Z',
+    },
+    {
+      moodleCourseId: 102,
+      moodleUserId: 3001,
+      userId: '00000000-0000-4000-8000-000000000003',
+      name: 'Ana Sofía García',
+      email: 'estudiante1@iinicia.edu.mx',
+      taskGrade: 98,
+      quizGrade: 96,
+      progress: 100,
+      feedback: 'Implementación sobresaliente de componentes React + TypeScript y RBAC.',
+      gradedByEmail: 'profesor@iinicia.edu.mx',
+      updatedAt: '2026-10-17T18:00:00Z',
+    },
+    {
+      moodleCourseId: 102,
+      moodleUserId: 3002,
+      userId: '00000000-0000-4000-8000-000000000004',
+      name: 'Carlos Eduardo López',
+      email: 'estudiante2@iinicia.edu.mx',
+      taskGrade: 93,
+      quizGrade: 95,
+      progress: 95,
+      feedback: 'Buen manejo de hooks y consumo seguro de API NestJS.',
+      gradedByEmail: 'profesor@iinicia.edu.mx',
+      updatedAt: '2026-10-17T18:15:00Z',
+    },
+  ];
+
   constructor(private readonly moodleService: MoodleService) {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (
-      supabaseUrl &&
-      supabaseServiceKey &&
-      supabaseUrl !== 'https://tu-proyecto.supabase.co'
-    ) {
+    const supabaseUrl =
+      process.env.SUPABASE_URL || 'https://pzlbxavsagibkbbqtlgd.supabase.co';
+    const supabaseServiceKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_ANON_KEY ||
+      'sb_publishable_JntNFNWjUVcNTnpKgCfzSA_LmyeYGn9';
+    if (supabaseUrl && supabaseServiceKey) {
       this.supabase = createClient(supabaseUrl, supabaseServiceKey, {
         auth: { persistSession: false },
       });
     }
+    this.loadPersistedState();
+  }
+
+  private loadPersistedState() {
+    // Cargar estado directamente desde Supabase PostgreSQL
+    this.loadFromSupabaseAsync();
+
+    // Garantizar que ivan3172001@gmail.com siempre esté activo y con rol Administrador
+    let ivanProfile = this.profiles.find(
+      (p) => p.email.toLowerCase() === 'ivan3172001@gmail.com',
+    );
+    if (!ivanProfile) {
+      ivanProfile = {
+        id: '00000000-0000-4000-8000-000000000006',
+        email: 'ivan3172001@gmail.com',
+        first_name: 'Iván',
+        last_name: '(Administrador)',
+        phone: '+52 55 1000 0000',
+        status: 'activo',
+        moodle_user_id: 1001,
+        moodle_sync_status: 'sincronizado',
+        moodle_last_sync_at: '2026-10-01T09:00:00Z',
+        created_at: '2026-10-01T08:00:00Z',
+        updated_at: new Date().toISOString(),
+      };
+      this.profiles.unshift(ivanProfile);
+    } else {
+      ivanProfile.status = 'activo';
+    }
+
+    this.userRoles = this.userRoles.filter(
+      (ur) => ur.user_id !== ivanProfile!.id,
+    );
+    this.userRoles.push({
+      user_id: ivanProfile.id,
+      role_code: 'admin',
+      assigned_at: '2026-10-01T08:00:00Z',
+    });
+
+    // Garantizar que negromante.ba@gmail.com siempre esté activo, con rol Profesor y asignado a Curso 1 y Curso 2
+    let profProfile = this.profiles.find(
+      (p) => p.email.toLowerCase() === 'negromante.ba@gmail.com',
+    );
+    if (!profProfile) {
+      profProfile = {
+        id: '00000000-0000-4000-8000-000000000007',
+        email: 'negromante.ba@gmail.com',
+        first_name: 'Profesor',
+        last_name: 'Titular (negromante.ba)',
+        phone: '+52 55 1000 0007',
+        status: 'activo',
+        moodle_user_id: 2002,
+        moodle_sync_status: 'sincronizado',
+        moodle_last_sync_at: '2026-10-15T12:00:00Z',
+        created_at: '2026-10-02T09:00:00Z',
+        updated_at: new Date().toISOString(),
+      };
+      this.profiles.unshift(profProfile);
+    } else {
+      profProfile.status = 'activo';
+      profProfile.moodle_user_id = profProfile.moodle_user_id || 2002;
+      profProfile.moodle_sync_status = 'sincronizado';
+    }
+
+    this.userRoles = this.userRoles.filter(
+      (ur) => ur.user_id !== profProfile!.id,
+    );
+    this.userRoles.push({
+      user_id: profProfile.id,
+      role_code: 'profesor',
+      assigned_at: '2026-10-02T09:00:00Z',
+    });
+
+    for (const courseMappingId of [
+      '22222222-2222-4222-8222-222222222201',
+      '22222222-2222-4222-8222-222222222202',
+    ]) {
+      const hasEnr = this.enrollments.some(
+        (e) =>
+          e.user_id === profProfile!.id &&
+          e.course_mapping_id === courseMappingId,
+      );
+      if (!hasEnr) {
+        this.enrollments.push({
+          id: `enr-negro-${courseMappingId.slice(-3)}`,
+          user_id: profProfile.id,
+          course_mapping_id: courseMappingId,
+          moodle_role: 'editingteacher',
+          status: 'sincronizada',
+          authorized_by: ivanProfile.id,
+          authorized_at: '2026-10-15T12:00:00Z',
+          moodle_synced_at: '2026-10-15T12:01:00Z',
+          notes: 'Titular docente en Campus Moodle',
+          created_at: '2026-10-15T11:55:00Z',
+        });
+      }
+    }
+
+    // Garantizar que urielgonzalezvargas25@gmail.com siempre esté activo, con rol Estudiante y matriculado en Curso 1 y Curso 2
+    let urielProfile = this.profiles.find(
+      (p) => p.email.toLowerCase() === 'urielgonzalezvargas25@gmail.com',
+    );
+    if (!urielProfile) {
+      urielProfile = {
+        id: '00000000-0000-4000-8000-000000000008',
+        email: 'urielgonzalezvargas25@gmail.com',
+        first_name: 'Uriel',
+        last_name: 'González Vargas',
+        phone: '+52 55 1000 0008',
+        status: 'activo',
+        moodle_user_id: 3003,
+        moodle_sync_status: 'sincronizado',
+        moodle_last_sync_at: '2026-10-16T12:00:00Z',
+        created_at: '2026-10-05T09:00:00Z',
+        updated_at: new Date().toISOString(),
+      };
+      this.profiles.unshift(urielProfile);
+    } else {
+      urielProfile.status = 'activo';
+      urielProfile.moodle_user_id = urielProfile.moodle_user_id || 3003;
+      urielProfile.moodle_sync_status = 'sincronizado';
+    }
+
+    this.userRoles = this.userRoles.filter(
+      (ur) => ur.user_id !== urielProfile!.id,
+    );
+    this.userRoles.push({
+      user_id: urielProfile.id,
+      role_code: 'estudiante',
+      assigned_at: '2026-10-05T09:00:00Z',
+    });
+
+    const hasUrielProgram = this.userPrograms.some(
+      (up) => up.user_id === urielProfile!.id,
+    );
+    if (!hasUrielProgram) {
+      this.userPrograms.push({
+        id: 'up-uriel-101',
+        user_id: urielProfile.id,
+        program_id: '11111111-1111-4111-8111-111111111101',
+        academic_status: 'cursando',
+        authorized_by: ivanProfile.id,
+        enrolled_at: '2026-10-05T10:00:00Z',
+      });
+    }
+
+    for (const courseMappingId of [
+      '22222222-2222-4222-8222-222222222201',
+      '22222222-2222-4222-8222-222222222202',
+    ]) {
+      const hasEnr = this.enrollments.some(
+        (e) =>
+          e.user_id === urielProfile!.id &&
+          e.course_mapping_id === courseMappingId,
+      );
+      if (!hasEnr) {
+        this.enrollments.push({
+          id: `enr-uriel-${courseMappingId.slice(-3)}`,
+          user_id: urielProfile.id,
+          course_mapping_id: courseMappingId,
+          moodle_role: 'student',
+          status: 'sincronizada',
+          authorized_by: ivanProfile.id,
+          authorized_at: '2026-10-16T12:00:00Z',
+          moodle_synced_at: '2026-10-16T12:01:00Z',
+          notes: 'Matrícula Estudiante en Campus Moodle',
+          created_at: '2026-10-16T11:55:00Z',
+        });
+      }
+    }
+
+    for (const courseId of [101, 102]) {
+      const hasGrade = this.courseGrades.some(
+        (g) =>
+          g.moodleCourseId === courseId &&
+          g.email.toLowerCase() === 'urielgonzalezvargas25@gmail.com',
+      );
+      if (!hasGrade) {
+        this.courseGrades.push({
+          moodleCourseId: courseId,
+          moodleUserId: 3003,
+          userId: urielProfile.id,
+          name: 'Uriel González Vargas',
+          email: 'urielgonzalezvargas25@gmail.com',
+          taskGrade: 95,
+          quizGrade: 96,
+          progress: 100,
+          feedback:
+            'Excelente desempeño en prácticas de sistemas y desarrollo web.',
+          gradedByEmail: 'negromante.ba@gmail.com',
+          updatedAt: '2026-10-17T12:00:00Z',
+        });
+      }
+    }
+
+    this.persistState();
+  }
+
+  private persistState() {
+    this.syncToSupabaseAsync();
+  }
+
+  /**
+   * Carga en vivo todas las tablas desde Supabase PostgreSQL (TeseBASe).
+   */
+  private async loadFromSupabaseAsync() {
+    if (!this.supabase) return;
+    try {
+      const [
+        profilesRes,
+        rolesRes,
+        programsRes,
+        enrollmentsRes,
+        gradesRes,
+        logsRes,
+      ] = await Promise.all([
+        this.supabase.from('profiles').select('*'),
+        this.supabase.from('user_roles').select('*'),
+        this.supabase.from('user_programs').select('*'),
+        this.supabase.from('enrollment_requests').select('*'),
+        this.supabase.from('course_grades').select('*'),
+        this.supabase
+          .from('audit_logs')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(100),
+      ]);
+
+      if (profilesRes.data && profilesRes.data.length > 0) {
+        this.profiles = profilesRes.data.map((p: any) => ({
+          id: p.id,
+          email: p.email,
+          first_name: p.first_name,
+          last_name: p.last_name,
+          phone: p.phone || '',
+          status: p.status,
+          moodle_user_id: p.moodle_user_id,
+          moodle_sync_status: p.moodle_sync_status || 'sin_sincronizar',
+          moodle_last_sync_at: p.moodle_last_sync_at,
+          created_at: p.created_at,
+          updated_at: p.updated_at || p.created_at,
+        }));
+      }
+
+      if (rolesRes.data && rolesRes.data.length > 0) {
+        this.userRoles = rolesRes.data.map((ur: any) => ({
+          user_id: ur.user_id,
+          role_code: ur.role_code,
+          assigned_at: ur.assigned_at,
+        }));
+      }
+
+      if (programsRes.data && programsRes.data.length > 0) {
+        this.userPrograms = programsRes.data.map((up: any) => ({
+          id: up.id,
+          user_id: up.user_id,
+          program_id: up.program_id,
+          academic_status: up.academic_status,
+          authorized_by: up.authorized_by,
+          enrolled_at: up.enrolled_at,
+        }));
+      }
+
+      if (enrollmentsRes.data && enrollmentsRes.data.length > 0) {
+        this.enrollments = enrollmentsRes.data.map((e: any) => ({
+          id: e.id,
+          user_id: e.user_id,
+          course_mapping_id: e.course_mapping_id,
+          moodle_role: e.moodle_role,
+          status: e.status,
+          authorized_by: e.authorized_by,
+          authorized_at: e.authorized_at,
+          moodle_synced_at: e.moodle_synced_at,
+          notes: e.notes || '',
+          created_at: e.created_at,
+        }));
+      }
+
+      if (gradesRes.data && gradesRes.data.length > 0) {
+        this.courseGrades = gradesRes.data.map((g: any) => ({
+          moodleCourseId: Number(g.moodle_course_id),
+          moodleUserId: Number(g.moodle_user_id || 3001),
+          userId: g.user_id || '',
+          name: g.student_name,
+          email: g.student_email,
+          taskGrade: Number(g.task_grade),
+          quizGrade: Number(g.quiz_grade),
+          progress: Number(g.progress),
+          feedback: g.feedback || '',
+          gradedByEmail: g.graded_by_email || 'negromante.ba@gmail.com',
+          updatedAt: g.updated_at,
+        }));
+      }
+
+      if (logsRes.data && logsRes.data.length > 0) {
+        this.auditLogs = logsRes.data.map((l: any) => ({
+          id: l.id,
+          actor_id: l.actor_id,
+          actor_email: l.actor_email,
+          target_user_id: l.target_user_id,
+          target_user_email: l.target_user_email,
+          action: l.action,
+          entity_type: l.entity_type,
+          entity_id: l.entity_id,
+          details: l.details || {},
+          created_at: l.created_at,
+        }));
+      }
+    } catch {
+      // Si alguna tabla aún no está accesible, continúa con memoria y sincroniza
+    }
+  }
+
+  /**
+   * Sincronización directa hacia las tablas de Supabase PostgreSQL (sin archivos locales).
+   */
+  private syncToSupabaseAsync() {
+    if (!this.supabase) return;
+
+    this.supabase
+      .from('profiles')
+      .upsert(
+        this.profiles.map((p) => ({
+          id: p.id,
+          email: p.email,
+          first_name: p.first_name,
+          last_name: p.last_name,
+          phone: p.phone || '',
+          status: p.status,
+          moodle_user_id: p.moodle_user_id,
+          moodle_sync_status: p.moodle_sync_status,
+          moodle_last_sync_at: p.moodle_last_sync_at,
+        })),
+        { onConflict: 'email' },
+      )
+      .then(() => {}, () => {});
+
+    this.supabase
+      .from('user_roles')
+      .upsert(
+        this.userRoles.map((ur) => ({
+          user_id: ur.user_id,
+          role_code: ur.role_code,
+          assigned_at: ur.assigned_at,
+        })),
+        { onConflict: 'user_id,role_code' },
+      )
+      .then(() => {}, () => {});
+
+    this.supabase
+      .from('enrollment_requests')
+      .upsert(
+        this.enrollments.map((e) => ({
+          user_id: e.user_id,
+          course_mapping_id: e.course_mapping_id,
+          moodle_role: e.moodle_role,
+          status: e.status,
+          authorized_by: e.authorized_by,
+          authorized_at: e.authorized_at,
+          moodle_synced_at: e.moodle_synced_at,
+          notes: e.notes || '',
+        })),
+        { onConflict: 'user_id,course_mapping_id' },
+      )
+      .then(() => {}, () => {});
+
+    this.supabase
+      .from('course_grades')
+      .upsert(
+        this.courseGrades.map((g) => ({
+          moodle_course_id: g.moodleCourseId,
+          student_email: g.email,
+          student_name: g.name,
+          moodle_user_id: g.moodleUserId,
+          task_grade: g.taskGrade,
+          quiz_grade: g.quizGrade,
+          progress: g.progress,
+          feedback: g.feedback,
+          graded_by_email: g.gradedByEmail,
+        })),
+        { onConflict: 'moodle_course_id,student_email' },
+      )
+      .then(() => {}, () => {});
   }
 
   isSupabaseLive(): boolean {
@@ -2124,6 +1990,159 @@ export class DataStoreService {
     return this.auditLogs.slice(0, limit);
   }
 
+  /**
+   * Consulta las calificaciones del curso en el Campus Moodle según el rol:
+   * - Profesor (editingteacher): ve y puede calificar a todos los estudiantes matriculados en ese curso.
+   * - Estudiante (student): ve únicamente sus propias calificaciones (CA-06, CA-12).
+   */
+  getCourseGradesForUser(ctx: AuthenticatedUserContext, moodleCourseId: number) {
+    const course = this.courseMappings.find(
+      (c) => c.moodle_course_id === Number(moodleCourseId),
+    );
+    if (!course) {
+      throw new NotFoundException('Curso de Moodle no encontrado.');
+    }
+
+    // Asegurar que todos los estudiantes matriculados en el curso aparezcan en el libro de calificaciones
+    const studentEnrollments = this.enrollments.filter(
+      (e) =>
+        e.course_mapping_id === course.id &&
+        e.moodle_role === 'student' &&
+        (e.status === 'autorizada' || e.status === 'sincronizada'),
+    );
+
+    for (const enr of studentEnrollments) {
+      const prof = this.profiles.find((p) => p.id === enr.user_id);
+      if (!prof) continue;
+      const exists = this.courseGrades.find(
+        (g) =>
+          g.moodleCourseId === Number(moodleCourseId) &&
+          (g.userId === prof.id || g.email.toLowerCase() === prof.email.toLowerCase()),
+      );
+      if (!exists) {
+        this.courseGrades.push({
+          moodleCourseId: Number(moodleCourseId),
+          moodleUserId: prof.moodle_user_id || 3050,
+          userId: prof.id,
+          name: `${prof.first_name} ${prof.last_name}`.trim(),
+          email: prof.email,
+          taskGrade: 0,
+          quizGrade: 0,
+          progress: 25,
+          feedback: 'Pendiente de revisión por el profesor titular.',
+          gradedByEmail: 'profesor@iinicia.edu.mx',
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    }
+
+    const isTeacher = ctx.roles.includes('profesor');
+    const allForCourse = this.courseGrades.filter(
+      (g) => g.moodleCourseId === Number(moodleCourseId),
+    );
+
+    if (isTeacher || ctx.roles.includes('admin') || ctx.roles.includes('superadmin')) {
+      return {
+        canEditGrades: isTeacher,
+        grades: allForCourse,
+      };
+    }
+
+    return {
+      canEditGrades: false,
+      grades: allForCourse.filter(
+        (g) =>
+          g.userId === ctx.profile.id ||
+          g.email.toLowerCase() === ctx.profile.email.toLowerCase(),
+      ),
+    };
+  }
+
+  /**
+   * Permite exclusivamente a un Profesor (rol 'profesor' / editingteacher en Moodle)
+   * calificar y retroalimentar a sus alumnos dentro del Aula Virtual Moodle (Sección 8 y CA-13).
+   */
+  updateStudentGradeByTeacher(
+    actorCtx: AuthenticatedUserContext,
+    payload: {
+      moodleCourseId: number;
+      studentEmail: string;
+      taskGrade: number;
+      quizGrade: number;
+      progress: number;
+      feedback: string;
+    },
+  ) {
+    if (!actorCtx.roles.includes('profesor')) {
+      throw new ForbiddenException(
+        'Solo los usuarios con rol Profesor (Teacher en Moodle) pueden registrar o modificar calificaciones de alumnos (Sección 10 y CA-13).',
+      );
+    }
+
+    const courseId = Number(payload.moodleCourseId);
+    const emailNorm = payload.studentEmail.trim().toLowerCase();
+
+    let record = this.courseGrades.find(
+      (g) =>
+        g.moodleCourseId === courseId && g.email.toLowerCase() === emailNorm,
+    );
+
+    const clamp = (n: number) =>
+      Math.max(0, Math.min(100, Math.round(Number(n) || 0)));
+    const now = new Date().toISOString();
+
+    if (!record) {
+      const studentProfile = this.profiles.find(
+        (p) => p.email.toLowerCase() === emailNorm,
+      );
+      record = {
+        moodleCourseId: courseId,
+        moodleUserId: studentProfile?.moodle_user_id || 3050,
+        userId: studentProfile?.id || `usr-${Date.now()}`,
+        name: studentProfile
+          ? `${studentProfile.first_name} ${studentProfile.last_name}`
+          : emailNorm,
+        email: emailNorm,
+        taskGrade: clamp(payload.taskGrade),
+        quizGrade: clamp(payload.quizGrade),
+        progress: clamp(payload.progress),
+        feedback: payload.feedback || '',
+        gradedByEmail: actorCtx.profile.email,
+        updatedAt: now,
+      };
+      this.courseGrades.push(record);
+    } else {
+      record.taskGrade = clamp(payload.taskGrade);
+      record.quizGrade = clamp(payload.quizGrade);
+      record.progress = clamp(payload.progress);
+      record.feedback = payload.feedback ?? record.feedback;
+      record.gradedByEmail = actorCtx.profile.email;
+      record.updatedAt = now;
+    }
+
+    this.recordAudit({
+      actor_id: actorCtx.profile.id,
+      target_user_id: record.userId,
+      action: 'MOODLE_TEACHER_GRADED_STUDENT',
+      entity_type: 'moodle_gradebook',
+      entity_id: `${courseId}:${record.email}`,
+      details: {
+        moodle_course_id: courseId,
+        student_email: record.email,
+        task_grade: record.taskGrade,
+        quiz_grade: record.quizGrade,
+        final_average: Math.round((record.taskGrade + record.quizGrade) / 2),
+        progress: record.progress,
+        feedback: record.feedback,
+      },
+    });
+
+    return {
+      updated: true,
+      gradeRecord: record,
+    };
+  }
+
   private recordAudit(entry: {
     actor_id: string | null;
     target_user_id: string | null;
@@ -2139,8 +2158,8 @@ export class DataStoreService {
       ? this.profiles.find((p) => p.id === entry.target_user_id)
       : undefined;
 
-    this.auditLogs.unshift({
-      id: `audit-${crypto.randomUUID().slice(0, 8)}`,
+    const newLog = {
+      id: crypto.randomUUID(),
       actor_id: entry.actor_id,
       actor_email: actor?.email || 'sistema@iinicia.edu.mx',
       target_user_id: entry.target_user_id,
@@ -2150,6 +2169,24 @@ export class DataStoreService {
       entity_id: entry.entity_id,
       details: entry.details,
       created_at: new Date().toISOString(),
-    });
+    };
+
+    this.auditLogs.unshift(newLog);
+
+    if (this.supabase) {
+      this.supabase
+        .from('audit_logs')
+        .insert({
+          actor_email: newLog.actor_email,
+          target_user_email: newLog.target_user_email || null,
+          action: newLog.action,
+          entity_type: newLog.entity_type,
+          entity_id: newLog.entity_id,
+          details: newLog.details,
+        })
+        .then(() => {}, () => {});
+    }
+
+    this.persistState();
   }
 }

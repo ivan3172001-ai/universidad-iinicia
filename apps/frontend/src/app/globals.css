@@ -8,75 +8,181 @@
   }
 
   body {
-    background-color: #14b8a6; /* Verde turquesa principal */
-    color: #042f2e;
+    background-color: #ffffff;
+    color: #0f172a;
     @apply antialiased;
   }
 }
 
-/* Sustitución global del verde oscuro/azulado profundo por Rojo Institucional TESE */
-.bg-iinicia-navy,
-.bg-slate-900,
-.bg-slate-900\/80 {
-  background-color: #7f1d1d !important; /* Rojo institucional oscuro */
+/* Patrón tecnológico hexagonal oscuro para el Header y Banners (estilo capturas IINICIA) */
+.hex-header-bg {
+  background-color: #050c21;
+  background-image:
+    radial-gradient(circle at 18% 50%, rgba(0, 180, 216, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 82% 30%, rgba(0, 102, 255, 0.16) 0%, transparent 50%),
+    linear-gradient(135deg, #04091a 0%, #081538 55%, #050c21 100%);
 }
 
-.bg-iinicia-primary,
-.bg-slate-800,
-.bg-slate-800\/80,
-.bg-slate-800\/90 {
-  background-color: #991b1b !important; /* Rojo institucional medio */
+/* ===== Animaciones de ambiente y entrada (identidad IINICIA) ===== */
+
+/* Zoom lento tipo Ken Burns para fondos del hero */
+@keyframes hero-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.14); }
+}
+.animate-hero-zoom {
+  animation: hero-zoom 20s ease-in-out infinite alternate;
 }
 
-.from-iinicia-navy {
-  --tw-gradient-from: #7f1d1d !important;
-  --tw-gradient-to: rgb(127 29 29 / 0) !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+/* Entrada escalonada al cargar el hero */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.via-iinicia-primary {
-  --tw-gradient-to: rgb(185 28 28 / 0) !important;
-  --tw-gradient-stops: var(--tw-gradient-from), #b91c1c, var(--tw-gradient-to) !important;
+/* Orbes de luz flotantes */
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(36px, -44px, 0) scale(1.15); }
+}
+.animate-float-slow { animation: float-slow 14s ease-in-out infinite; }
+.animate-float-slower { animation: float-slow 22s ease-in-out infinite reverse; }
+
+/* Balanceo suave para elementos destacados */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-bob { animation: bob 5s ease-in-out infinite; }
+
+/* Respiración suave de resplandores de fondo */
+@keyframes breathe {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.32; }
+}
+.animate-breathe { animation: breathe 7s ease-in-out infinite; }
+
+/* Giro lento de engranes */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 14s linear infinite; }
+
+/* Destello que barre los botones principales */
+@keyframes shine {
+  0% { transform: translateX(-160%) skewX(-20deg); }
+  55%, 100% { transform: translateX(320%) skewX(-20deg); }
+}
+.animate-shine { animation: shine 3.6s ease-in-out infinite; }
+
+/* Pulso de resplandor azul en el CTA */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.45), 0 10px 25px -5px rgba(0, 102, 255, 0.5); }
+  50% { box-shadow: 0 0 0 14px rgba(0, 102, 255, 0), 0 10px 25px -5px rgba(0, 102, 255, 0.5); }
+}
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* Cinta tecnológica en movimiento continuo */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 32s linear infinite; }
+.marquee-pausable:hover .animate-marquee { animation-play-state: paused; }
+
+/* Aparición al hacer scroll (Reveal.tsx) */
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-left { transform: translateX(-44px); }
+.reveal-right { transform: translateX(44px); }
+.reveal-zoom { transform: scale(0.9); }
+.reveal.is-visible { opacity: 1; transform: translate(0, 0) scale(1); }
+
+/* Subrayado animado tipo neón para los enlaces del Navbar */
+.nav-link-animated {
+  position: relative;
+  display: inline-block;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.nav-link-animated:hover {
+  transform: translateY(-1px);
+}
+.nav-link-animated::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2.5px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #38bdf8, #0066ff, #00b4d8);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link-animated:hover::after,
+.nav-link-animated.is-active::after {
+  transform: scaleX(1);
 }
 
-.to-iinicia-primary,
-.to-slate-900 {
-  --tw-gradient-to: #991b1b !important;
+/* Tarjetas interactivas globales con elevación 3D y brillo sutil */
+.card-hover-3d {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease;
+}
+.card-hover-3d:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 102, 255, 0.45);
+  box-shadow:
+    0 22px 45px -12px rgba(0, 102, 255, 0.18),
+    0 8px 20px -6px rgba(15, 23, 42, 0.08);
 }
 
-.text-iinicia-primary,
-.text-iinicia-navy {
-  color: #991b1b !important;
+/* Efecto hover en tarjetas de módulos */
+.module-card-hover {
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.module-card-hover:hover {
+  transform: translateX(4px);
+  background-color: #f0f9ff;
+  border-color: rgba(0, 102, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.08);
 }
 
-.hover\:bg-teal-900:hover {
-  background-color: #7f1d1d !important;
-}
-
-/* Sustitución global del fondo blanco y gris claro por tonos verde turquesa */
-.bg-white {
-  background-color: #99f6e4 !important; /* Turquesa suave para tarjetas y contenedores */
-  border-color: #0d9488 !important;
-}
-
-.bg-slate-50,
-.bg-slate-50\/50,
-.bg-slate-50\/80,
-.bg-slate-100 {
-  background-color: #5eead4 !important; /* Turquesa medio para bloques internos */
-  border-color: #0f766e !important;
-}
-
-/* Inputs, selects y textareas con fondo turquesa claro legible */
-input,
-select,
-textarea {
-  background-color: #ccfbf1 !important;
-  border-color: #991b1b !important;
-  color: #042f2e !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #115e59 !important;
+/* Accesibilidad: respetar usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-zoom,
+  .animate-float-slow,
+  .animate-float-slower,
+  .animate-bob,
+  .animate-breathe,
+  .animate-spin-slow,
+  .animate-shine,
+  .animate-pulse-glow,
+  .animate-marquee,
+  .animate-fade-up {
+    animation: none !important;
+  }
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }

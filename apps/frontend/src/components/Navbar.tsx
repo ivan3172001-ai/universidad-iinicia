@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { IiniciaLogo } from './IiniciaLogo';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -19,11 +20,11 @@ export function Navbar() {
 
   const navItems = [
     { href: '/', label: 'Inicio' },
-    { href: '/universidad', label: 'Universidad' },
-    { href: '/oferta-academica', label: 'Oferta Académica' },
-    { href: '/admisiones', label: 'Admisiones' },
+    { href: '/cursos', label: 'Cursos' },
+    { href: '/certificaciones', label: 'Certificaciones' },
+    { href: '/diplomados', label: 'Diplomados' },
+    { href: '/oferta-academica', label: 'Universidad IINICIA' },
     { href: '/noticias', label: 'Noticias' },
-    { href: '/contacto', label: 'Contacto' },
   ];
 
   const handleLogout = () => {
@@ -33,43 +34,29 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-iinicia-navy to-iinicia-primary text-white border-b-2 border-iinicia-teal shadow-md">
-      {/* Enlace de accesibilidad por teclado WCAG 2.2 AA (Sección 13) */}
+    <header className="sticky top-0 z-50 hex-header-bg text-white border-b border-slate-800/80 shadow-lg">
+      {/* Enlace de accesibilidad por teclado WCAG 2.2 AA */}
       <a
         href="#contenido-principal"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-iinicia-navy focus:px-4 focus:py-2 focus:rounded-md focus:font-semibold"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-slate-950 focus:px-4 focus:py-2 focus:rounded-md focus:font-semibold"
       >
         Saltar al contenido principal
       </a>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Identidad Institucional TESE */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-iinicia-teal rounded-lg p-1"
-            >
-              <img
-                src="/logo-tese.png"
-                alt="Escudo oficial del Tecnológico de Estudios Superiores de Ecatepec (TESE)"
-                className="w-12 h-12 rounded-lg bg-white p-0.5 object-contain shadow-sm"
-              />
-              <div>
-                <span className="block font-extrabold text-xl tracking-tight leading-none">
-                  TESE
-                </span>
-                <span className="block text-xs text-teal-200 font-medium mt-0.5">
-                  Tecnológico de Estudios Superiores de Ecatepec
-                </span>
-              </div>
-            </Link>
-          </div>
+        <div className="flex items-center justify-between h-28">
+          {/* Logo i² INICIA */}
+          <Link
+            href="/"
+            className="group flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-sky-400 rounded-lg py-1 transition-transform duration-300 hover:scale-105"
+          >
+            <IiniciaLogo variant="dark" size="md" />
+          </Link>
 
-          {/* Navegación Escritorio */}
+          {/* Menú de Navegación Escritorio con subrayado animado y destello */}
           <nav
-            aria-label="Navegación institucional principal"
-            className="hidden lg:flex items-center gap-1"
+            aria-label="Navegación principal"
+            className="hidden lg:flex items-center gap-6"
           >
             {navItems.map((item) => {
               const active =
@@ -80,41 +67,37 @@ export function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`nav-link-animated text-sm font-semibold tracking-wide py-1.5 ${
                     active
-                      ? 'bg-white/15 text-teal-200 border-b-2 border-iinicia-teal'
-                      : 'text-slate-100 hover:bg-white/10 hover:text-white'
+                      ? 'text-sky-400 is-active'
+                      : 'text-slate-100 hover:text-sky-300'
                   }`}
                 >
                   {item.label}
                 </Link>
               );
             })}
-          </nav>
 
-          {/* Acciones de Identidad y Acceso por Rol */}
-          <div className="hidden lg:flex items-center gap-3">
             {user ? (
-              <>
+              <div className="flex items-center gap-3 pl-3 border-l border-slate-700">
                 <Link
                   href="/mi-iinicia"
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition ${
+                  className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
                     pathname === '/mi-iinicia'
-                      ? 'bg-iinicia-teal text-slate-950'
+                      ? 'bg-[#0066ff] text-white shadow-md shadow-blue-500/30'
                       : 'bg-white/10 hover:bg-white/20 text-white'
                   }`}
                 >
                   Mi IINICIA ({user.primaryRole.toUpperCase()})
                 </Link>
 
-                {/* Requisito obligatorio Sección 6 y 9.2: Solo personal autorizado visualiza el enlace Administrativo */}
                 {isStaff && (
                   <Link
                     href="/admin"
-                    className={`px-3.5 py-2 rounded-lg text-sm font-semibold border transition ${
+                    className={`px-3.5 py-2 rounded-full text-xs font-bold border transition-all duration-300 hover:scale-105 ${
                       pathname === '/admin'
-                        ? 'bg-amber-400 text-slate-950 border-amber-300'
-                        : 'border-teal-300/60 text-teal-200 hover:bg-white/10'
+                        ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md'
+                        : 'border-sky-400/60 text-sky-300 hover:bg-white/10'
                     }`}
                   >
                     Panel Admin
@@ -123,7 +106,7 @@ export function Navbar() {
 
                 <Link
                   href="/perfil"
-                  className="px-3 py-2 rounded-lg text-xs font-medium text-slate-200 hover:bg-white/10"
+                  className="nav-link-animated text-xs font-medium text-slate-300 hover:text-white py-1"
                 >
                   Mi Perfil
                 </Link>
@@ -131,37 +114,45 @@ export function Navbar() {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="px-3 py-2 rounded-lg text-xs font-semibold bg-rose-600/90 hover:bg-rose-600 text-white transition"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-300 hover:scale-105"
                 >
                   Salir
                 </button>
-              </>
+              </div>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="px-4 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10 border border-white/25 transition"
-                >
-                  Iniciar sesión
-                </Link>
+              <div className="flex items-center gap-5 pl-2">
                 <Link
                   href="/registro"
-                  className="px-4 py-2 rounded-lg text-sm font-bold bg-iinicia-teal hover:bg-teal-400 text-slate-950 shadow-sm transition"
+                  className={`nav-link-animated text-sm font-semibold py-1.5 ${
+                    pathname === '/registro'
+                      ? 'text-sky-400 is-active'
+                      : 'text-slate-100 hover:text-sky-300'
+                  }`}
                 >
-                  Registro de Aspirantes
+                  Regístrate
                 </Link>
-              </>
+                <Link
+                  href="/login"
+                  className="group relative overflow-hidden px-5 py-2 rounded-full text-sm font-bold bg-[#0066ff] hover:bg-blue-500 text-white shadow-md animate-pulse-glow transition-all duration-300 hover:scale-105"
+                >
+                  <span className="relative z-10">Iniciar Sesión</span>
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine"
+                  />
+                </Link>
+              </div>
             )}
-          </div>
+          </nav>
 
-          {/* Botón Menú Móvil (Responsive Sección 13, CA-16) */}
+          {/* Botón Menú Móvil */}
           <div className="lg:hidden">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Abrir menú de navegación"
-              className="p-2 rounded-lg text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-iinicia-teal"
+              className="p-2 rounded-lg text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-sky-400"
             >
               <span className="text-sm font-bold">
                 {mobileMenuOpen ? '✕ Cerrar' : '☰ Menú'}
@@ -173,7 +164,7 @@ export function Navbar() {
 
       {/* Menú Móvil Desplegable */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-iinicia-navy border-t border-white/10 px-4 pt-3 pb-5 space-y-2">
+        <div className="lg:hidden bg-[#050c21] border-t border-slate-800 px-4 pt-3 pb-6 space-y-2">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -184,13 +175,13 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
-          <div className="pt-3 border-t border-white/15 flex flex-col gap-2">
+          <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
             {user ? (
               <>
                 <Link
                   href="/mi-iinicia"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2.5 rounded-lg font-bold bg-iinicia-teal text-slate-950"
+                  className="block text-center px-4 py-2.5 rounded-full font-bold bg-[#0066ff] text-white"
                 >
                   Mi IINICIA ({user.primaryRole.toUpperCase()})
                 </Link>
@@ -198,7 +189,7 @@ export function Navbar() {
                   <Link
                     href="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-center px-4 py-2 rounded-lg font-semibold border border-teal-300 text-teal-200"
+                    className="block text-center px-4 py-2 rounded-full font-semibold border border-sky-400 text-sky-300"
                   >
                     Panel Administrativo
                   </Link>
@@ -213,7 +204,7 @@ export function Navbar() {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full px-4 py-2 rounded-lg text-sm font-semibold bg-rose-600 text-white"
+                  className="w-full px-4 py-2 rounded-full text-sm font-semibold bg-rose-600 text-white"
                 >
                   Cerrar sesión
                 </button>
@@ -221,18 +212,18 @@ export function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2.5 rounded-lg font-semibold border border-white/25 text-white"
-                >
-                  Iniciar sesión
-                </Link>
-                <Link
                   href="/registro"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2.5 rounded-lg font-bold bg-iinicia-teal text-slate-950"
+                  className="block text-center px-4 py-2.5 rounded-full font-semibold border border-white/25 text-white"
                 >
-                  Registro de Aspirantes
+                  Regístrate
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-center px-4 py-2.5 rounded-full font-bold bg-[#0066ff] text-white"
+                >
+                  Iniciar Sesión
                 </Link>
               </>
             )}

@@ -5,15 +5,16 @@ export default function UniversidadPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-14">
       <header className="max-w-3xl">
         <span className="text-xs font-bold uppercase tracking-wider text-iinicia-primary">
-          TESE
+          UNIVERSIDAD i² INICIA
         </span>
         <h1 className="text-4xl font-extrabold text-slate-900 mt-1">
-          Tecnológico de Estudios Superiores de Ecatepec (TESE)
+          Instituto de Innovación y Ciencias Aplicadas (IINICIA)
         </h1>
         <p className="text-lg text-slate-600 mt-3 leading-relaxed">
-          El TESE es una institución pública de educación superior tecnológica
-          comprometida con la formación de ingenieros de excelencia en 9
-          carreras estratégicas.
+          UNIVERSIDAD i² INICIA es una institución de educación superior
+          tecnológica especializada en cursos, certificaciones y diplomados de
+          la rama de Informática, Desarrollo de Software, Ciberseguridad,
+          Inteligencia Artificial, Cloud Computing y Sistemas Computacionales.
         </p>
       </header>
 
@@ -25,8 +26,9 @@ export default function UniversidadPage() {
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed">
             Somos una comunidad universitaria enfocada en el desarrollo de
-            competencias profesionales en ingeniería, tecnología y gestión,
-            integrando acompañamiento docente personalizado y herramientas.
+            competencias profesionales en informática, sistemas y tecnología,
+            integrando acompañamiento docente personalizado y laboratorios
+            virtuales.
           </p>
         </div>
 
@@ -53,7 +55,7 @@ export default function UniversidadPage() {
       {/* Modelo Educativo */}
       <section className="bg-gradient-to-r from-iinicia-navy to-iinicia-primary text-white rounded-2xl p-8 shadow-lg">
         <h2 className="text-2xl font-extrabold mb-4">
-          Modelo Educativo Integrado (Portal + Moodle LMS)
+          Modelo Educativo Universitario (Portal + Moodle LMS)
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-100">
           <div className="bg-white/10 rounded-xl p-4 border border-white/15">
@@ -61,7 +63,7 @@ export default function UniversidadPage() {
               1. Aprendizaje Basado en Proyectos
             </h3>
             <p>
-              Cada asignatura en Moodle integra recursos teóricos, actividades
+              Cada curso en Moodle integra recursos teóricos, actividades
               prácticas entregables, foros de discusión y evaluaciones con
               retroalimentación docente.
             </p>
@@ -80,9 +82,9 @@ export default function UniversidadPage() {
               3. Experiencia Digital Única
             </h3>
             <p>
-              Desde el registro como aspirante hasta la titulación, el estudiante
-              gestiona su trayectoria en Mi IINICIA y accede de forma transparente
-              a sus aulas virtuales.
+              Desde el registro como aspirante hasta la certificación, el
+              estudiante gestiona su trayectoria en Mi IINICIA y accede de forma
+              transparente a sus aulas virtuales.
             </p>
           </div>
         </div>
@@ -109,7 +111,7 @@ export default function UniversidadPage() {
 
           <div className="bg-white rounded-xl border border-slate-200 p-5">
             <span className="text-xs font-bold uppercase text-iinicia-primary">
-              Claustro Docente · Ingeniería y Desarrollo Web
+              Claustro Docente · Informática y Sistemas
             </span>
             <h3 className="text-lg font-bold text-slate-900 mt-1">
               Ing. Roberto Méndez

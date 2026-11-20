@@ -14,7 +14,7 @@ export default function ContactoPage() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-10">
       <header>
         <span className="text-xs font-bold uppercase tracking-wider text-iinicia-primary">
-          Atención Universitaria · Sección 9.1
+          Atención Universitaria · UNIVERSIDAD i² INICIA
         </span>
         <h1 className="text-4xl font-extrabold text-slate-900 mt-1">
           Contacto y Soporte Académico
@@ -114,7 +114,7 @@ export default function ContactoPage() {
                   rows={4}
                   required
                   className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-iinicia-teal"
-                  placeholder="Describe tu consulta sobre admisiones, programas o acceso al campus..."
+                  placeholder="Describe tu consulta sobre admisiones, cursos o acceso al campus..."
                 />
               </div>
 

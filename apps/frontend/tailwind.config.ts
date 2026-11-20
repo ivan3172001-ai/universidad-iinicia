@@ -10,11 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         iinicia: {
-          navy: '#7f1d1d',    // Rojo institucional profundo (TESE)
-          primary: '#b91c1c', // Rojo institucional principal (TESE)
-          teal: '#14b8a6',
-          light: '#f0fdfa',
-          gold: '#d97706',
+          navy: '#060e26',    // Azul marino oscuro tecnológico (Header / Hero)
+          primary: '#0066ff', // Azul eléctrico principal (Botones / Acentos)
+          teal: '#00b4d8',    // Cian brillante del logo i² INICIA
+          light: '#ebf5ff',   // Azul hielo claro para secciones destacadas
+          gold: '#f59e0b',
         },
       },
     },

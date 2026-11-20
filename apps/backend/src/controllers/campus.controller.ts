@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { RbacGuard } from '../guards/rbac.guard';
 import { DataStoreService } from '../services/data-store.service';
 
@@ -9,10 +18,6 @@ export class CampusController {
 
   /**
    * Sección 9.2: Panel Mi IINICIA adaptado al rol autenticado.
-   * - Estudiante: ve sus datos, programa y únicamente los cursos en los que está matriculado (CA-11, CA-12).
-   * - Profesor: ve sus cursos asignados con rol docente (CA-13).
-   * - Aspirante: ve estado de admisión sin acceso a cursos (Sección 6).
-   * - Administrador: ve resumen de gestión y enlaces administrativos.
    */
   @Get('dashboard')
   getDashboard(@Req() req: any) {
@@ -23,10 +28,32 @@ export class CampusController {
    * Sección 11: Genera acceso seguro SSO al Campus Moodle para un curso autorizado.
    */
   @Post('launch/:courseMappingId')
-  launchCourse(@Req() req: any, @Param('courseMappingId') courseMappingId: string) {
+  launchCourse(
+    @Req() req: any,
+    @Param('courseMappingId') courseMappingId: string,
+  ) {
     return this.dataStore.generateCourseLaunchForUser(
       req.userContext,
       courseMappingId,
     );
+  }
+
+  /**
+   * Consulta el libro de calificaciones de un curso en Moodle según el rol (Profesor vs Estudiante).
+   */
+  @Get('grades')
+  getGrades(@Req() req: any, @Query('courseId') courseId?: string) {
+    return this.dataStore.getCourseGradesForUser(
+      req.userContext,
+      Number(courseId || 101),
+    );
+  }
+
+  /**
+   * Permite al Profesor (Teacher) calificar y retroalimentar a un alumno en Moodle (CA-13).
+   */
+  @Post('grades')
+  saveGrade(@Req() req: any, @Body() body: any) {
+    return this.dataStore.updateStudentGradeByTeacher(req.userContext, body);
   }
 }

@@ -5,13 +5,13 @@ export default function AdmisionesPage() {
   const steps = [
     {
       step: 'Paso 1',
-      title: 'Registro en el Portal IINICIA (/registro)',
+      title: 'Registro en el Portal Universitario IINICIA (/registro)',
       desc: 'Capturas tus datos personales y correo electrónico. Supabase Auth genera tu identidad segura y el sistema crea tu perfil con el rol inicial de Aspirante.',
     },
     {
       step: 'Paso 2',
       title: 'Validación y Asignación de Rol Estudiante',
-      desc: 'El equipo administrativo de IINICIA revisa tu solicitud, valida tu expediente y actualiza tu rol a Estudiante asociándote a tu programa académico.',
+      desc: 'El equipo administrativo de Universidad IINICIA revisa tu solicitud, valida tu expediente y actualiza tu rol a Estudiante asociándote a tu programa o curso de Informática y Sistemas.',
     },
     {
       step: 'Paso 3',
@@ -29,15 +29,15 @@ export default function AdmisionesPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-12">
       <header className="max-w-3xl">
         <span className="text-xs font-bold uppercase tracking-wider text-iinicia-primary">
-          Flujo Funcional 7.1 y 7.3 · Sección 9.1
+          UNIVERSIDAD i² INICIA · Admisiones e Inscripción
         </span>
         <h1 className="text-4xl font-extrabold text-slate-900 mt-1">
-          Proceso de Admisiones e Inscripción
+          Proceso de Admisiones e Inscripción Universitaria
         </h1>
         <p className="text-slate-600 mt-3 leading-relaxed">
           Conoce el proceso paso a paso desde tu registro inicial como Aspirante
           hasta tu incorporación como Estudiante activo en el Campus Virtual
-          Moodle.
+          Moodle de Universidad IINICIA.
         </p>
       </header>
 
@@ -47,7 +47,7 @@ export default function AdmisionesPage() {
             key={item.step}
             className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-2"
           >
-            <span className="inline-block px-3 py-1 rounded-md text-xs font-bold bg-teal-50 text-iinicia-primary border border-teal-200">
+            <span className="inline-block px-3 py-1 rounded-md text-xs font-bold bg-sky-50 text-iinicia-primary border border-sky-200">
               {item.step}
             </span>
             <h2 className="text-xl font-bold text-slate-900">{item.title}</h2>
@@ -67,7 +67,7 @@ export default function AdmisionesPage() {
         </div>
         <Link
           href="/registro"
-          className="px-6 py-3.5 rounded-xl font-bold bg-iinicia-teal text-slate-950 hover:bg-teal-400 transition shrink-0"
+          className="px-6 py-3.5 rounded-xl font-bold bg-iinicia-primary text-white hover:bg-blue-500 transition shrink-0"
         >
           Ir al Formulario de Registro →
         </Link>

@@ -282,15 +282,28 @@ export class MoodleService {
       .update(payload)
       .digest('hex');
 
-    const launchUrl = `${this.moodleBaseUrl}/course/view.php?id=${params.moodleCourseId}&sso_ticket=${signature.slice(0, 24)}&expires=${expiresAt}`;
+    const frontendOrigin =
+      process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
+    const ticketShort = signature.slice(0, 24);
+    const externalMoodleUrl = `${this.moodleBaseUrl}/course/view.php?id=${params.moodleCourseId}&sso_ticket=${ticketShort}&expires=${expiresAt}`;
+    const campusPortalUrl = `${frontendOrigin}/campus?courseId=${params.moodleCourseId}&shortname=${encodeURIComponent(
+      params.moodleShortname,
+    )}&role=${params.courseRole}&moodleUserId=${params.moodleUserId}&sso_ticket=${ticketShort}&expires=${expiresAt}`;
+
+    const launchUrl = this.isLiveMode() ? externalMoodleUrl : campusPortalUrl;
 
     return {
       launchUrl,
+      campusPortalUrl,
+      externalMoodleUrl,
       moodleBaseUrl: this.moodleBaseUrl,
       moodleCourseId: params.moodleCourseId,
       moodleShortname: params.moodleShortname,
       moodleUserId: params.moodleUserId,
-      assignedMoodleRole: params.courseRole === 'editingteacher' ? 'Teacher (Profesor)' : 'Student (Estudiante)',
+      assignedMoodleRole:
+        params.courseRole === 'editingteacher'
+          ? 'Teacher (Profesor)'
+          : 'Student (Estudiante)',
       expiresInSeconds: 60,
       securityGuarantee:
         'Ticket efímero generado servidor-a-servidor (HMAC-SHA256). Sin exposición de MOODLE_WS_TOKEN ni contraseñas en texto plano.',

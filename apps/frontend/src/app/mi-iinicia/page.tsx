@@ -108,6 +108,17 @@ export default function MiIiniciaPage() {
         </div>
 
         <div className="flex flex-wrap gap-3">
+          {(primaryRole === 'estudiante' ||
+            primaryRole === 'profesor' ||
+            primaryRole === 'admin' ||
+            primaryRole === 'superadmin') && (
+            <Link
+              href="/campus"
+              className="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-[#0066ff] hover:bg-blue-500 text-white shadow transition"
+            >
+              Entrar al Campus Moodle →
+            </Link>
+          )}
           <Link
             href="/perfil"
             className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/20 transition"
@@ -448,14 +459,14 @@ export default function MiIiniciaPage() {
             </div>
 
             <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
-              <a
-                href={ssoModal.launchData.launchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-xl text-sm font-bold bg-iinicia-primary text-white hover:bg-teal-900 transition"
+              <Link
+                href={`/campus?courseId=${ssoModal.launchData.moodleCourseId}&sso_ticket=${encodeURIComponent(
+                  ssoModal.launchData.launchUrl,
+                )}`}
+                className="px-5 py-2.5 rounded-xl text-sm font-bold bg-[#0066ff] text-white hover:bg-blue-700 transition"
               >
-                Abrir Instancia Moodle en Nueva Pestaña ↗
-              </a>
+                Ingresar al Aula Virtual Moodle (SSO) →
+              </Link>
               <button
                 type="button"
                 onClick={() => setSsoModal(null)}

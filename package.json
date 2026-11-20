@@ -8,15 +8,11 @@
     "apps/frontend"
   ],
   "scripts": {
+    "dev": "node scripts/start-all.mjs",
     "dev:backend": "npm --workspace=apps/backend run start:dev",
     "dev:frontend": "npm --workspace=apps/frontend run dev",
     "build:backend": "npm --workspace=apps/backend run build",
     "build:frontend": "npm --workspace=apps/frontend run build",
-    "build": "npm run build:backend && npm run build:frontend",
-    "test:poc": "node scripts/run-poc-e2e.mjs",
-    "moodle:up": "docker compose up -d",
-    "moodle:down": "docker compose down",
-    "moodle:provision": "node moodle/scripts/provision-courses-and-users.mjs",
-    "supabase:verify": "node scripts/sync-to-supabase.mjs"
+    "build": "npm run build:backend && npm run build:frontend"
   }
 }
