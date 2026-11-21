@@ -124,20 +124,24 @@ export default function HomePage() {
 
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <h1
-              className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-wider uppercase text-white drop-shadow-md animate-fade-up pt-4 flex flex-col items-center gap-1"
+              className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-wider uppercase text-white drop-shadow-md animate-fade-up pt-6 flex flex-col items-center gap-1"
               style={{ animationDelay: '100ms' }}
             >
               <span className="inline-flex items-baseline">
-                <span className="relative inline-block">
+                <span className="relative inline-flex flex-col items-center">
                   <span
-                    className="absolute -top-3.5 sm:-top-5 left-1/2 -translate-x-1/2 text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-white animate-bob"
-                    style={{ animationDelay: '700ms' }}
+                    className="absolute -top-4 sm:-top-6 inset-x-0 flex justify-center tracking-normal -ml-[0.05em] text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-white pointer-events-none"
                   >
-                    2
+                    <span
+                      className="inline-block animate-bob"
+                      style={{ animationDelay: '700ms' }}
+                    >
+                      2
+                    </span>
                   </span>
-                  I
+                  <span>I</span>
                 </span>
-                NICIA
+                <span>NICIA</span>
               </span>
               <span className="block">UNIVERSIDAD</span>
             </h1>
