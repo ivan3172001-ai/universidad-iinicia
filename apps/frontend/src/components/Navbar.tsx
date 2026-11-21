@@ -42,7 +42,7 @@ export function Navbar() {
       </a>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-4 min-h-[7rem] py-3">
+        <div className="flex flex-nowrap items-center justify-between gap-4 sm:gap-6 py-2.5">
           {/* Logo i² INICIA */}
           <Link
             href="/"
@@ -51,10 +51,10 @@ export function Navbar() {
             <IiniciaLogo variant="dark" size="md" />
           </Link>
 
-          {/* Menú de Navegación SIEMPRE Horizontal (uno al lado del otro) */}
+          {/* Menú de Navegación SIEMPRE al mismo nivel que el logo */}
           <nav
             aria-label="Navegación principal"
-            className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2"
+            className="flex flex-1 flex-wrap items-center justify-end gap-x-3.5 sm:gap-x-5 gap-y-2"
           >
             {navItems.map((item) => {
               const active =
