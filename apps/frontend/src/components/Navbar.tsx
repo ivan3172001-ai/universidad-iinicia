@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { IiniciaLogo } from './IiniciaLogo';
 
@@ -10,7 +10,6 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isStaff =
     user &&
@@ -29,7 +28,6 @@ export function Navbar() {
 
   const handleLogout = () => {
     logout();
-    setMobileMenuOpen(false);
     router.push('/');
   };
 
@@ -44,19 +42,19 @@ export function Navbar() {
       </a>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-28">
+        <div className="flex flex-wrap items-center justify-between gap-4 min-h-[7rem] py-3">
           {/* Logo i² INICIA */}
           <Link
             href="/"
-            className="group flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-sky-400 rounded-lg py-1 transition-transform duration-300 hover:scale-105"
+            className="group flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-sky-400 rounded-lg py-1 transition-transform duration-300 hover:scale-105 shrink-0"
           >
             <IiniciaLogo variant="dark" size="md" />
           </Link>
 
-          {/* Menú de Navegación Escritorio con subrayado animado y destello */}
+          {/* Menú de Navegación SIEMPRE Horizontal (uno al lado del otro) */}
           <nav
             aria-label="Navegación principal"
-            className="hidden lg:flex items-center gap-6"
+            className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2"
           >
             {navItems.map((item) => {
               const active =
@@ -67,7 +65,7 @@ export function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`nav-link-animated text-sm font-semibold tracking-wide py-1.5 ${
+                  className={`nav-link-animated text-sm font-semibold tracking-wide py-1.5 whitespace-nowrap ${
                     active
                       ? 'text-sky-400 is-active'
                       : 'text-slate-100 hover:text-sky-300'
@@ -79,10 +77,10 @@ export function Navbar() {
             })}
 
             {user ? (
-              <div className="flex items-center gap-3 pl-3 border-l border-slate-700">
+              <div className="flex flex-wrap items-center gap-3 pl-3 border-l border-slate-700">
                 <Link
                   href="/mi-iinicia"
-                  className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
+                  className={`px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 hover:scale-105 ${
                     pathname === '/mi-iinicia'
                       ? 'bg-[#0066ff] text-white shadow-md shadow-blue-500/30'
                       : 'bg-white/10 hover:bg-white/20 text-white'
@@ -94,7 +92,7 @@ export function Navbar() {
                 {isStaff && (
                   <Link
                     href="/admin"
-                    className={`px-3.5 py-2 rounded-full text-xs font-bold border transition-all duration-300 hover:scale-105 ${
+                    className={`px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap border transition-all duration-300 hover:scale-105 ${
                       pathname === '/admin'
                         ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md'
                         : 'border-sky-400/60 text-sky-300 hover:bg-white/10'
@@ -106,7 +104,7 @@ export function Navbar() {
 
                 <Link
                   href="/perfil"
-                  className="nav-link-animated text-xs font-medium text-slate-300 hover:text-white py-1"
+                  className="nav-link-animated text-xs font-medium text-slate-300 hover:text-white py-1 whitespace-nowrap"
                 >
                   Mi Perfil
                 </Link>
@@ -123,7 +121,7 @@ export function Navbar() {
               <div className="flex items-center gap-5 pl-2">
                 <Link
                   href="/registro"
-                  className={`nav-link-animated text-sm font-semibold py-1.5 ${
+                  className={`nav-link-animated text-sm font-semibold py-1.5 whitespace-nowrap ${
                     pathname === '/registro'
                       ? 'text-sky-400 is-active'
                       : 'text-slate-100 hover:text-sky-300'
@@ -133,7 +131,7 @@ export function Navbar() {
                 </Link>
                 <Link
                   href="/login"
-                  className="group relative overflow-hidden px-5 py-2 rounded-full text-sm font-bold bg-[#0066ff] hover:bg-blue-500 text-white shadow-md animate-pulse-glow transition-all duration-300 hover:scale-105"
+                  className="group relative overflow-hidden px-5 py-2 rounded-full text-sm font-bold bg-[#0066ff] hover:bg-blue-500 text-white shadow-md animate-pulse-glow transition-all duration-300 hover:scale-105 whitespace-nowrap"
                 >
                   <span className="relative z-10">Iniciar Sesión</span>
                   <span
@@ -144,92 +142,8 @@ export function Navbar() {
               </div>
             )}
           </nav>
-
-          {/* Botón Menú Móvil */}
-          <div className="lg:hidden">
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-expanded={mobileMenuOpen}
-              aria-label="Abrir menú de navegación"
-              className="p-2 rounded-lg text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-sky-400"
-            >
-              <span className="text-sm font-bold">
-                {mobileMenuOpen ? '✕ Cerrar' : '☰ Menú'}
-              </span>
-            </button>
-          </div>
         </div>
       </div>
-
-      {/* Menú Móvil Desplegable */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#050c21] border-t border-slate-800 px-4 pt-3 pb-6 space-y-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-slate-100 hover:bg-white/10"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
-            {user ? (
-              <>
-                <Link
-                  href="/mi-iinicia"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2.5 rounded-full font-bold bg-[#0066ff] text-white"
-                >
-                  Mi IINICIA ({user.primaryRole.toUpperCase()})
-                </Link>
-                {isStaff && (
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block text-center px-4 py-2 rounded-full font-semibold border border-sky-400 text-sky-300"
-                  >
-                    Panel Administrativo
-                  </Link>
-                )}
-                <Link
-                  href="/perfil"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/10"
-                >
-                  Mi Perfil ({user.profile.email})
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="w-full px-4 py-2 rounded-full text-sm font-semibold bg-rose-600 text-white"
-                >
-                  Cerrar sesión
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/registro"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2.5 rounded-full font-semibold border border-white/25 text-white"
-                >
-                  Regístrate
-                </Link>
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-2.5 rounded-full font-bold bg-[#0066ff] text-white"
-                >
-                  Iniciar Sesión
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </header>
   );
 }
