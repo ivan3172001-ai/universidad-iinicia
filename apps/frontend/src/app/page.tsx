@@ -124,7 +124,7 @@ export default function HomePage() {
 
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <h1
-              className="whitespace-nowrap text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-wider uppercase text-white drop-shadow-md animate-fade-up pt-4"
+              className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-wider uppercase text-white drop-shadow-md animate-fade-up pt-4 flex flex-col items-center gap-1"
               style={{ animationDelay: '100ms' }}
             >
               <span className="inline-flex items-baseline">
@@ -138,8 +138,8 @@ export default function HomePage() {
                   I
                 </span>
                 NICIA
-              </span>{' '}
-              UNIVERSIDAD
+              </span>
+              <span className="block">UNIVERSIDAD</span>
             </h1>
 
             <div
