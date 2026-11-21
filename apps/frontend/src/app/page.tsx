@@ -100,7 +100,7 @@ export default function HomePage() {
     <div className="bg-white">
       {/* 1. HERO PRINCIPAL CON IMAGEN DE FONDO Y DISEÑO UNIVERSIDAD i²INICIA */}
       <div className="bg-[#e8f4fd]">
-        <section className="relative overflow-hidden bg-[#111827] text-white py-24 lg:py-32 rounded-br-[90px] lg:rounded-br-[140px] shadow-xl">
+        <section className="relative overflow-hidden bg-[#111827] text-white pt-10 pb-20 lg:pt-14 lg:pb-26 rounded-br-[90px] lg:rounded-br-[140px] shadow-xl">
           {/* Segunda imagen de fondo (estudiantes en laboratorio de cómputo) con zoom lento */}
           <div
             aria-hidden="true"
@@ -122,16 +122,16 @@ export default function HomePage() {
             className="absolute -bottom-28 -right-20 w-[28rem] h-[28rem] rounded-full bg-[#00b4d8]/20 blur-3xl animate-float-slower"
           />
 
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <h1
-              className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-wider uppercase text-white drop-shadow-md animate-fade-up"
+              className="whitespace-nowrap text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-wider uppercase text-white drop-shadow-md animate-fade-up pt-4"
               style={{ animationDelay: '100ms' }}
             >
               UNIVERSIDAD{' '}
               <span className="inline-flex items-baseline">
                 <span className="relative inline-block">
                   <span
-                    className="absolute -top-4 sm:-top-6 left-1/2 -translate-x-1/2 text-lg sm:text-2xl lg:text-3xl font-extrabold text-white animate-bob"
+                    className="absolute -top-3.5 sm:-top-5 left-1/2 -translate-x-1/2 text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-white animate-bob"
                     style={{ animationDelay: '700ms' }}
                   >
                     2
