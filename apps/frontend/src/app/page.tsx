@@ -128,18 +128,22 @@ export default function HomePage() {
               style={{ animationDelay: '100ms' }}
             >
               <span className="inline-flex items-baseline">
-                <span className="relative inline-flex flex-col items-center">
+                <span
+                  className="relative inline-flex flex-col items-center"
+                  style={{ letterSpacing: '0px', marginRight: '0.05em' }}
+                >
                   <span
-                    className="absolute -top-4 sm:-top-6 inset-x-0 flex justify-center tracking-normal -ml-[0.05em] text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-white pointer-events-none"
+                    className="absolute -top-3.5 sm:-top-4 lg:-top-5 left-0 right-0 flex justify-center text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-white pointer-events-none"
+                    style={{ letterSpacing: '0px' }}
                   >
                     <span
                       className="inline-block animate-bob"
-                      style={{ animationDelay: '700ms' }}
+                      style={{ animationDelay: '700ms', letterSpacing: '0px' }}
                     >
                       2
                     </span>
                   </span>
-                  <span>I</span>
+                  <span style={{ letterSpacing: '0px' }}>I</span>
                 </span>
                 <span>NICIA</span>
               </span>
