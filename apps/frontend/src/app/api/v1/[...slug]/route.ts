@@ -814,6 +814,45 @@ export async function GET(
 
   if (pathStr === '/campus/grades') {
     const courseId = Number(req.nextUrl.searchParams.get('courseId') || 101);
+    try {
+      const { data: dbGrades } = await supabase
+        .from('course_grades')
+        .select('*')
+        .eq('moodle_course_id', courseId);
+
+      if (dbGrades && dbGrades.length > 0) {
+        for (const row of dbGrades) {
+          const emailNorm = String(row.student_email || '')
+            .trim()
+            .toLowerCase();
+          const existing = store.courseGrades.find(
+            (g) =>
+              g.moodleCourseId === courseId &&
+              g.email.toLowerCase() === emailNorm,
+          );
+          if (existing) {
+            existing.taskGrade = Number(row.task_grade ?? existing.taskGrade);
+            existing.quizGrade = Number(row.quiz_grade ?? existing.quizGrade);
+            existing.progress = Number(row.progress ?? existing.progress);
+            existing.feedback = String(row.feedback ?? existing.feedback);
+          } else {
+            store.courseGrades.push({
+              moodleCourseId: courseId,
+              moodleUserId: Number(row.moodle_user_id || 3003),
+              name: String(row.student_name || emailNorm),
+              email: emailNorm,
+              taskGrade: Number(row.task_grade ?? 0),
+              quizGrade: Number(row.quiz_grade ?? 0),
+              progress: Number(row.progress ?? 100),
+              feedback: String(row.feedback ?? ''),
+            });
+          }
+        }
+      }
+    } catch {
+      // Fallback a memoria si no hay conexión momentánea
+    }
+
     const grades = store.courseGrades.filter(
       (g) => g.moodleCourseId === courseId,
     );
@@ -972,7 +1011,12 @@ export async function POST(
 
   if (pathStr === '/campus/grades') {
     const ctx = resolveUserFromRequest(req);
-    if (!ctx || !ctx.roles.includes('profesor')) {
+    if (
+      !ctx ||
+      (!ctx.roles.includes('profesor') &&
+        !ctx.roles.includes('admin') &&
+        !ctx.roles.includes('superadmin'))
+    ) {
       return NextResponse.json(
         {
           message:
@@ -985,33 +1029,83 @@ export async function POST(
     const emailNorm = String(body.studentEmail || '')
       .trim()
       .toLowerCase();
-    const record = store.courseGrades.find(
+    let record = store.courseGrades.find(
       (g) =>
         g.moodleCourseId === courseId && g.email.toLowerCase() === emailNorm,
     );
+    const taskGrade = Math.max(
+      0,
+      Math.min(100, Math.round(Number(body.taskGrade ?? 0))),
+    );
+    const quizGrade = Math.max(
+      0,
+      Math.min(100, Math.round(Number(body.quizGrade ?? 0))),
+    );
+    const progress = Math.max(
+      0,
+      Math.min(100, Math.round(Number(body.progress ?? 100))),
+    );
+    const feedback = String(body.feedback ?? '');
+
     if (record) {
-      record.taskGrade = Number(body.taskGrade ?? record.taskGrade);
-      record.quizGrade = Number(body.quizGrade ?? record.quizGrade);
-      record.progress = Number(body.progress ?? record.progress);
-      record.feedback = String(body.feedback ?? record.feedback);
+      record.taskGrade = taskGrade;
+      record.quizGrade = quizGrade;
+      record.progress = progress;
+      record.feedback = feedback;
+    } else {
+      const studentProf = store.profiles.find(
+        (p) => p.email.toLowerCase() === emailNorm,
+      );
+      record = {
+        moodleCourseId: courseId,
+        moodleUserId: studentProf?.moodle_user_id || 3003,
+        name: studentProf
+          ? `${studentProf.first_name} ${studentProf.last_name}`.trim()
+          : String(body.studentName || emailNorm),
+        email: emailNorm,
+        taskGrade,
+        quizGrade,
+        progress,
+        feedback,
+      };
+      store.courseGrades.push(record);
     }
-    supabase
-      .from('course_grades')
-      .upsert(
+
+    try {
+      await supabase.from('course_grades').upsert(
         {
           moodle_course_id: courseId,
           student_email: emailNorm,
-          student_name: record?.name || emailNorm,
-          moodle_user_id: record?.moodleUserId || 3001,
-          task_grade: Number(body.taskGrade ?? 0),
-          quiz_grade: Number(body.quizGrade ?? 0),
-          progress: Number(body.progress ?? 100),
-          feedback: String(body.feedback ?? ''),
+          student_name: record.name,
+          moodle_user_id: record.moodleUserId,
+          task_grade: taskGrade,
+          quiz_grade: quizGrade,
+          progress,
+          feedback,
           graded_by_email: ctx.profile.email,
         },
         { onConflict: 'moodle_course_id,student_email' },
-      )
-      .then(() => {}, () => {});
+      );
+
+      await supabase.from('audit_logs').insert({
+        actor_email: ctx.profile.email,
+        target_user_email: emailNorm,
+        action: 'MOODLE_TEACHER_GRADED_STUDENT',
+        entity_type: 'course_grades',
+        entity_id: `${courseId}:${emailNorm}`,
+        details: {
+          moodle_course_id: courseId,
+          task_grade: taskGrade,
+          quiz_grade: quizGrade,
+          final_average: Math.round((taskGrade + quizGrade) / 2),
+          progress,
+          feedback,
+        },
+      });
+    } catch {
+      // Continuar si falla escritura remota
+    }
+
     store.auditLogs.unshift({
       id: `audit-${Date.now()}`,
       actor_email: ctx.profile.email,
@@ -1021,10 +1115,10 @@ export async function POST(
       entity_id: `${courseId}:${emailNorm}`,
       details: {
         moodle_course_id: courseId,
-        task_grade: body.taskGrade,
-        quiz_grade: body.quizGrade,
-        progress: body.progress,
-        feedback: body.feedback,
+        task_grade: taskGrade,
+        quiz_grade: quizGrade,
+        progress,
+        feedback,
       },
       created_at: new Date().toISOString(),
     });
@@ -1076,7 +1170,12 @@ export async function PATCH(
 
   if (pathStr === '/campus/grades') {
     const ctx = resolveUserFromRequest(req);
-    if (!ctx || !ctx.roles.includes('profesor')) {
+    if (
+      !ctx ||
+      (!ctx.roles.includes('profesor') &&
+        !ctx.roles.includes('admin') &&
+        !ctx.roles.includes('superadmin'))
+    ) {
       return NextResponse.json(
         {
           message:
@@ -1089,33 +1188,83 @@ export async function PATCH(
     const emailNorm = String(body.studentEmail || '')
       .trim()
       .toLowerCase();
-    const record = store.courseGrades.find(
+    let record = store.courseGrades.find(
       (g) =>
         g.moodleCourseId === courseId && g.email.toLowerCase() === emailNorm,
     );
+    const taskGrade = Math.max(
+      0,
+      Math.min(100, Math.round(Number(body.taskGrade ?? 0))),
+    );
+    const quizGrade = Math.max(
+      0,
+      Math.min(100, Math.round(Number(body.quizGrade ?? 0))),
+    );
+    const progress = Math.max(
+      0,
+      Math.min(100, Math.round(Number(body.progress ?? 100))),
+    );
+    const feedback = String(body.feedback ?? '');
+
     if (record) {
-      record.taskGrade = Number(body.taskGrade ?? record.taskGrade);
-      record.quizGrade = Number(body.quizGrade ?? record.quizGrade);
-      record.progress = Number(body.progress ?? record.progress);
-      record.feedback = String(body.feedback ?? record.feedback);
+      record.taskGrade = taskGrade;
+      record.quizGrade = quizGrade;
+      record.progress = progress;
+      record.feedback = feedback;
+    } else {
+      const studentProf = store.profiles.find(
+        (p) => p.email.toLowerCase() === emailNorm,
+      );
+      record = {
+        moodleCourseId: courseId,
+        moodleUserId: studentProf?.moodle_user_id || 3003,
+        name: studentProf
+          ? `${studentProf.first_name} ${studentProf.last_name}`.trim()
+          : String(body.studentName || emailNorm),
+        email: emailNorm,
+        taskGrade,
+        quizGrade,
+        progress,
+        feedback,
+      };
+      store.courseGrades.push(record);
     }
-    supabase
-      .from('course_grades')
-      .upsert(
+
+    try {
+      await supabase.from('course_grades').upsert(
         {
           moodle_course_id: courseId,
           student_email: emailNorm,
-          student_name: record?.name || emailNorm,
-          moodle_user_id: record?.moodleUserId || 3001,
-          task_grade: Number(body.taskGrade ?? 0),
-          quiz_grade: Number(body.quizGrade ?? 0),
-          progress: Number(body.progress ?? 100),
-          feedback: String(body.feedback ?? ''),
+          student_name: record.name,
+          moodle_user_id: record.moodleUserId,
+          task_grade: taskGrade,
+          quiz_grade: quizGrade,
+          progress,
+          feedback,
           graded_by_email: ctx.profile.email,
         },
         { onConflict: 'moodle_course_id,student_email' },
-      )
-      .then(() => {}, () => {});
+      );
+
+      await supabase.from('audit_logs').insert({
+        actor_email: ctx.profile.email,
+        target_user_email: emailNorm,
+        action: 'MOODLE_TEACHER_GRADED_STUDENT',
+        entity_type: 'course_grades',
+        entity_id: `${courseId}:${emailNorm}`,
+        details: {
+          moodle_course_id: courseId,
+          task_grade: taskGrade,
+          quiz_grade: quizGrade,
+          final_average: Math.round((taskGrade + quizGrade) / 2),
+          progress,
+          feedback,
+        },
+      });
+    } catch {
+      // Continuar si falla escritura remota
+    }
+
     store.auditLogs.unshift({
       id: `audit-${Date.now()}`,
       actor_email: ctx.profile.email,
@@ -1125,10 +1274,10 @@ export async function PATCH(
       entity_id: `${courseId}:${emailNorm}`,
       details: {
         moodle_course_id: courseId,
-        task_grade: body.taskGrade,
-        quiz_grade: body.quizGrade,
-        progress: body.progress,
-        feedback: body.feedback,
+        task_grade: taskGrade,
+        quiz_grade: quizGrade,
+        progress,
+        feedback,
       },
       created_at: new Date().toISOString(),
     });

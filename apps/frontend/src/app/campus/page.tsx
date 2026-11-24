@@ -165,6 +165,15 @@ function CampusMoodleContent() {
     }>
   >([
     {
+      moodleUserId: 3003,
+      name: 'Uriel González Vargas',
+      email: 'urielgonzalezvargas25@gmail.com',
+      taskGrade: 95,
+      quizGrade: 96,
+      progress: 100,
+      feedback: 'Excelente desempeño en prácticas de sistemas y desarrollo web.',
+    },
+    {
       moodleUserId: 3001,
       name: 'Ana Sofía García',
       email: 'estudiante1@iinicia.edu.mx',
@@ -655,11 +664,20 @@ function CampusMoodleContent() {
                 <ul className="space-y-3 text-xs">
                   <li className="p-3 rounded-xl bg-indigo-50 border border-indigo-200">
                     <div className="font-extrabold text-indigo-950">
-                      👨‍🏫 Mtro. Roberto Méndez
+                      👨‍🏫 Profesor Titular (negromante.ba)
                     </div>
                     <div className="text-indigo-700">
-                      profesor@iinicia.edu.mx · Rol Moodle:{' '}
+                      negromante.ba@gmail.com · Rol Moodle:{' '}
                       <strong>Teacher (editingteacher)</strong>
+                    </div>
+                  </li>
+                  <li className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <div className="font-extrabold text-emerald-950">
+                      👨‍🎓 Uriel González Vargas
+                    </div>
+                    <div className="text-emerald-700">
+                      urielgonzalezvargas25@gmail.com · Rol Moodle:{' '}
+                      <strong>Student (ID #3003)</strong>
                     </div>
                   </li>
                   <li className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
@@ -1041,10 +1059,9 @@ function CampusMoodleContent() {
                     .filter((st) =>
                       isTeacher
                         ? true
-                        : st.email.toLowerCase() === profile.email.toLowerCase() ||
-                          st.moodleUserId === 3001,
+                        : st.email.toLowerCase() === profile.email.toLowerCase(),
                     )
-                    .map((st, idx) => {
+                    .map((st) => {
                       const avg = Math.round((st.taskGrade + st.quizGrade) / 2);
                       return (
                         <tr key={st.email}>
@@ -1066,8 +1083,9 @@ function CampusMoodleContent() {
                                 onChange={(e) => {
                                   const val = Number(e.target.value);
                                   setStudentGrades((prev) =>
-                                    prev.map((item, i) =>
-                                      i === idx
+                                    prev.map((item) =>
+                                      item.email.toLowerCase() ===
+                                      st.email.toLowerCase()
                                         ? { ...item, taskGrade: val }
                                         : item,
                                     ),
@@ -1089,8 +1107,9 @@ function CampusMoodleContent() {
                                 onChange={(e) => {
                                   const val = Number(e.target.value);
                                   setStudentGrades((prev) =>
-                                    prev.map((item, i) =>
-                                      i === idx
+                                    prev.map((item) =>
+                                      item.email.toLowerCase() ===
+                                      st.email.toLowerCase()
                                         ? { ...item, quizGrade: val }
                                         : item,
                                     ),
@@ -1114,9 +1133,28 @@ function CampusMoodleContent() {
                             </span>
                           </td>
                           <td className="py-3.5 px-4">
-                            <div className="text-xs text-slate-700">
-                              {st.feedback}
-                            </div>
+                            {isTeacher ? (
+                              <input
+                                type="text"
+                                value={st.feedback}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setStudentGrades((prev) =>
+                                    prev.map((item) =>
+                                      item.email.toLowerCase() ===
+                                      st.email.toLowerCase()
+                                        ? { ...item, feedback: val }
+                                        : item,
+                                    ),
+                                  );
+                                }}
+                                className="w-full rounded-lg border border-slate-300 px-2.5 py-1 text-xs text-slate-800"
+                              />
+                            ) : (
+                              <div className="text-xs text-slate-700">
+                                {st.feedback}
+                              </div>
+                            )}
                             <div className="text-[11px] font-bold text-[#0066ff] mt-0.5">
                               ✔ {st.progress}% Completado
                             </div>

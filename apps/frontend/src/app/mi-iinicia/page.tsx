@@ -14,6 +14,57 @@ export default function MiIiniciaPage() {
     launchData: any;
     courseItem: any;
   } | null>(null);
+  const [selectedGradeCourseId, setSelectedGradeCourseId] =
+    useState<number>(101);
+  const [courseGrades, setCourseGrades] = useState<any[]>([]);
+  const [gradeSavedMsg, setGradeSavedMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!accessToken) return;
+    apiRequest(
+      `/campus/grades?courseId=${selectedGradeCourseId}`,
+      {},
+      accessToken,
+    )
+      .then((res: any) => {
+        if (Array.isArray(res?.grades)) {
+          setCourseGrades(res.grades);
+        }
+      })
+      .catch(() => {});
+  }, [accessToken, selectedGradeCourseId]);
+
+  const handleSaveStudentGrade = async (student: any) => {
+    if (!accessToken) return;
+    setGradeSavedMsg(null);
+    setError(null);
+    try {
+      await apiRequest(
+        '/campus/grades',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            moodleCourseId: selectedGradeCourseId,
+            studentEmail: student.email,
+            studentName: student.name,
+            taskGrade: student.taskGrade,
+            quizGrade: student.quizGrade,
+            progress: student.progress,
+            feedback: student.feedback,
+          }),
+        },
+        accessToken,
+      );
+      setGradeSavedMsg(
+        `✔ Calificación de ${student.name} (${student.email}) guardada exitosamente en Supabase.`,
+      );
+      setTimeout(() => setGradeSavedMsg(null), 4000);
+    } catch (err: any) {
+      setError(
+        err.message || 'No se pudo guardar la calificación del estudiante.',
+      );
+    }
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -259,6 +310,281 @@ export default function MiIiniciaPage() {
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* PANEL DIRECTO DE CALIFICACIONES: PROFESOR CALIFICA ALUMNOS / ESTUDIANTE VE SUS CALIFICACIONES */}
+      {(primaryRole === 'profesor' ||
+        primaryRole === 'estudiante' ||
+        primaryRole === 'admin' ||
+        primaryRole === 'superadmin') && (
+        <section className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#0066ff]">
+                {primaryRole === 'estudiante'
+                  ? 'Boleta Académica en Tiempo Real · Supabase + Moodle'
+                  : 'Evaluación Docente · Libro de Calificaciones en Tiempo Real'}
+              </span>
+              <h2 className="text-2xl font-extrabold text-slate-900 mt-1">
+                {primaryRole === 'estudiante'
+                  ? '📊 Mis Calificaciones y Retroalimentación del Profesor'
+                  : '📝 Calificar Alumnos Matriculados'}
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                {primaryRole === 'estudiante'
+                  ? 'Consulta tus calificaciones de tareas, cuestionarios, promedio final y comentarios de tu profesor.'
+                  : 'Modifica las calificaciones y retroalimentación de cualquier alumno y pulsa "Guardar Calificación" para actualizar su boleta al instante.'}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => setSelectedGradeCourseId(101)}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition ${
+                  selectedGradeCourseId === 101
+                    ? 'bg-[#0066ff] text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                Curso 1: Introducción a las TI (TI-101)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedGradeCourseId(102)}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition ${
+                  selectedGradeCourseId === 102
+                    ? 'bg-[#0066ff] text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                Curso 2: Desarrollo Web con React (WEB-202)
+              </button>
+            </div>
+          </div>
+
+          {gradeSavedMsg && (
+            <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-extrabold">
+              {gradeSavedMsg}
+            </div>
+          )}
+
+          {primaryRole === 'estudiante' ? (
+            <div className="grid grid-cols-1 gap-4">
+              {courseGrades
+                .filter(
+                  (g) =>
+                    g.email.toLowerCase() === profile.email.toLowerCase(),
+                )
+                .map((g) => {
+                  const avg = Math.round((g.taskGrade + g.quizGrade) / 2);
+                  return (
+                    <div
+                      key={`${selectedGradeCourseId}-${g.email}`}
+                      className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                          <div className="text-xs font-bold text-[#0066ff] uppercase">
+                            {selectedGradeCourseId === 101
+                              ? 'Curso 1 · Introducción a las Tecnologías de la Información (TI-101)'
+                              : 'Curso 2 · Desarrollo Web con React (WEB-202)'}
+                          </div>
+                          <h3 className="text-lg font-extrabold text-slate-900">
+                            Alumno: {g.name} ({g.email})
+                          </h3>
+                        </div>
+                        <span
+                          className={`px-4 py-1.5 rounded-full text-xs font-extrabold ${
+                            avg >= 70
+                              ? 'bg-emerald-100 text-emerald-900'
+                              : 'bg-rose-100 text-rose-900'
+                          }`}
+                        >
+                          Promedio Final: {avg} / 100 (
+                          {avg >= 70 ? 'APROBADO' : 'POR ACREDITAR'})
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="p-4 rounded-xl bg-white border border-slate-200">
+                          <span className="text-xs text-slate-500">
+                            Tarea / Actividad Práctica
+                          </span>
+                          <div className="text-2xl font-black text-slate-900 mt-1">
+                            {g.taskGrade} <span className="text-sm font-normal text-slate-400">/ 100</span>
+                          </div>
+                        </div>
+                        <div className="p-4 rounded-xl bg-white border border-slate-200">
+                          <span className="text-xs text-slate-500">
+                            Cuestionario Evaluable
+                          </span>
+                          <div className="text-2xl font-black text-slate-900 mt-1">
+                            {g.quizGrade} <span className="text-sm font-normal text-slate-400">/ 100</span>
+                          </div>
+                        </div>
+                        <div className="p-4 rounded-xl bg-white border border-slate-200">
+                          <span className="text-xs text-slate-500">
+                            Avance de Finalización
+                          </span>
+                          <div className="text-2xl font-black text-[#0066ff] mt-1">
+                            {g.progress}%
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-sky-50 border border-sky-200 text-xs text-slate-800">
+                        <strong className="text-[#0066ff]">
+                          👨‍🏫 Retroalimentación de tu Profesor:
+                        </strong>{' '}
+                        {g.feedback || 'Sin comentarios adicionales.'}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {courseGrades.map((st) => {
+                const avg = Math.round((st.taskGrade + st.quizGrade) / 2);
+                return (
+                  <div
+                    key={`${selectedGradeCourseId}-${st.email}`}
+                    className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <div className="font-extrabold text-base text-slate-900">
+                          👨‍🎓 {st.name}{' '}
+                          <span className="text-xs font-mono text-slate-500">
+                            ({st.email})
+                          </span>
+                        </div>
+                        <div className="text-xs text-slate-600 mt-0.5">
+                          Moodle Student ID #{st.moodleUserId} · Promedio
+                          calculado:{' '}
+                          <strong
+                            className={
+                              avg >= 70 ? 'text-emerald-700' : 'text-rose-600'
+                            }
+                          >
+                            {avg} / 100 ({avg >= 70 ? 'Aprobado' : 'Por acreditar'})
+                          </strong>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSaveStudentGrade(st)}
+                        className="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-[#0066ff] hover:bg-blue-700 text-white shadow-sm transition shrink-0"
+                      >
+                        💾 Guardar Calificación del Alumno
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Calificación Tarea (0 - 100):
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={st.taskGrade}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setCourseGrades((prev) =>
+                              prev.map((item) =>
+                                item.email.toLowerCase() ===
+                                st.email.toLowerCase()
+                                  ? { ...item, taskGrade: val }
+                                  : item,
+                              ),
+                            );
+                          }}
+                          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Calificación Cuestionario (0 - 100):
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={st.quizGrade}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setCourseGrades((prev) =>
+                              prev.map((item) =>
+                                item.email.toLowerCase() ===
+                                st.email.toLowerCase()
+                                  ? { ...item, quizGrade: val }
+                                  : item,
+                              ),
+                            );
+                          }}
+                          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Avance del Curso (%):
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={st.progress}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setCourseGrades((prev) =>
+                              prev.map((item) =>
+                                item.email.toLowerCase() ===
+                                st.email.toLowerCase()
+                                  ? { ...item, progress: val }
+                                  : item,
+                              ),
+                            );
+                          }}
+                          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Retroalimentación / Comentario del Profesor para el
+                        Alumno:
+                      </label>
+                      <input
+                        type="text"
+                        value={st.feedback}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setCourseGrades((prev) =>
+                            prev.map((item) =>
+                              item.email.toLowerCase() ===
+                              st.email.toLowerCase()
+                                ? { ...item, feedback: val }
+                                : item,
+                            ),
+                          );
+                        }}
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-800 bg-white"
+                        placeholder="Escribe un comentario o retroalimentación para el alumno..."
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
       )}
 
