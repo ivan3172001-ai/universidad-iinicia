@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import {
   BadRequestException,
   Body,
@@ -10,6 +11,27 @@ import {
 } from '@nestjs/common';
 import { RbacGuard } from '../guards/rbac.guard';
 import { DataStoreService } from '../services/data-store.service';
+
+const SESSION_HMAC_SECRET =
+  process.env.MOODLE_SSO_SHARED_SECRET ||
+  'iinicia-jwt-hmac-sha256-institutional-secret-2026';
+
+function signSessionToken(userId: string, email: string): string {
+  const now = Date.now();
+  const payloadB64 = Buffer.from(
+    JSON.stringify({
+      sub: userId,
+      email: email.trim().toLowerCase(),
+      iat: now,
+      exp: now + 8 * 3600 * 1000,
+    }),
+  ).toString('base64url');
+  const sig = crypto
+    .createHmac('sha256', SESSION_HMAC_SECRET)
+    .update(payloadB64)
+    .digest('base64url');
+  return `iinicia.${payloadB64}.${sig}`;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -47,7 +69,10 @@ export class AuthController {
     return {
       message:
         'Registro completado en Supabase Auth y tabla profiles. Se asignó el rol inicial Aspirante.',
-      accessToken: userContext.profile.id,
+      accessToken: signSessionToken(
+        userContext.profile.id,
+        userContext.profile.email,
+      ),
       user: userContext,
     };
   }
@@ -77,7 +102,10 @@ export class AuthController {
 
     return {
       message: 'Sesión iniciada correctamente a través de Supabase Auth.',
-      accessToken: userContext.profile.id,
+      accessToken: signSessionToken(
+        userContext.profile.id,
+        userContext.profile.email,
+      ),
       user: userContext,
     };
   }

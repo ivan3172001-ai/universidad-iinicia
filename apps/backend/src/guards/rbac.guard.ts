@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import {
   CanActivate,
   ExecutionContext,
@@ -9,6 +10,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import { DataStoreService } from '../services/data-store.service';
 import { RoleCode } from '../types/domain';
+
+const SESSION_HMAC_SECRET =
+  process.env.MOODLE_SSO_SHARED_SECRET ||
+  'iinicia-jwt-hmac-sha256-institutional-secret-2026';
 
 export const ROLES_KEY = 'iinicia_required_roles';
 export const RequireRoles = (...roles: RoleCode[]) => SetMetadata(ROLES_KEY, roles);
@@ -32,7 +37,35 @@ export class RbacGuard implements CanActivate {
 
     let identifier = '';
     if (authHeader && authHeader.startsWith('Bearer ')) {
-      identifier = authHeader.replace('Bearer ', '').trim();
+      const rawToken = authHeader.replace('Bearer ', '').trim();
+      const parts = rawToken.split('.');
+      if (parts.length === 3 && parts[0] === 'iinicia') {
+        try {
+          const [, payloadB64, providedSig] = parts;
+          const expectedSig = crypto
+            .createHmac('sha256', SESSION_HMAC_SECRET)
+            .update(payloadB64)
+            .digest('base64url');
+          const bufA = Buffer.from(providedSig);
+          const bufB = Buffer.from(expectedSig);
+          if (
+            bufA.length !== bufB.length ||
+            !crypto.timingSafeEqual(bufA, bufB)
+          ) {
+            throw new UnauthorizedException('Firma de token HMAC-SHA256 inválida.');
+          }
+          const decoded = JSON.parse(
+            Buffer.from(payloadB64, 'base64url').toString('utf8'),
+          );
+          if (decoded.exp && Date.now() > Number(decoded.exp)) {
+            throw new UnauthorizedException('El token de sesión ha expirado.');
+          }
+          identifier = String(decoded.email || decoded.sub || '').trim();
+        } catch (err) {
+          if (err instanceof UnauthorizedException) throw err;
+          throw new UnauthorizedException('Token de sesión inválido.');
+        }
+      }
     } else if (headerUserId) {
       identifier = String(headerUserId).trim();
     }

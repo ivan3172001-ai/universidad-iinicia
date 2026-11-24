@@ -1,6 +1,11 @@
+import * as crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { FALLBACK_PROGRAMS } from '../../../../lib/api';
 import { supabase } from '../../../../lib/supabase';
+
+const SESSION_HMAC_SECRET =
+  process.env.MOODLE_SSO_SHARED_SECRET ||
+  'iinicia-jwt-hmac-sha256-institutional-secret-2026';
 
 type RoleCode =
   | 'superadmin'
@@ -600,8 +605,20 @@ function getPrimaryRole(roles: RoleCode[]): RoleCode {
 }
 
 function encodeToken(userId: string, email: string) {
-  const payload = JSON.stringify({ sub: userId, email, iat: Date.now() });
-  return `iinicia.${Buffer.from(payload).toString('base64url')}.sig`;
+  const now = Date.now();
+  const payloadB64 = Buffer.from(
+    JSON.stringify({
+      sub: userId,
+      email: email.trim().toLowerCase(),
+      iat: now,
+      exp: now + 8 * 3600 * 1000,
+    }),
+  ).toString('base64url');
+  const sig = crypto
+    .createHmac('sha256', SESSION_HMAC_SECRET)
+    .update(payloadB64)
+    .digest('base64url');
+  return `iinicia.${payloadB64}.${sig}`;
 }
 
 function resolveUserFromRequest(req: NextRequest) {
@@ -609,26 +626,51 @@ function resolveUserFromRequest(req: NextRequest) {
   if (auth.startsWith('Bearer ')) {
     const token = auth.slice(7).trim();
     const parts = token.split('.');
-    if (parts.length >= 2) {
+    if (parts.length === 3 && parts[0] === 'iinicia') {
       try {
+        const [, payloadB64, providedSig] = parts;
+        const expectedSig = crypto
+          .createHmac('sha256', SESSION_HMAC_SECRET)
+          .update(payloadB64)
+          .digest('base64url');
+
+        const bufA = Buffer.from(providedSig);
+        const bufB = Buffer.from(expectedSig);
+        if (
+          bufA.length !== bufB.length ||
+          !crypto.timingSafeEqual(bufA, bufB)
+        ) {
+          return null;
+        }
+
         const decoded = JSON.parse(
-          Buffer.from(parts[1], 'base64url').toString('utf8'),
+          Buffer.from(payloadB64, 'base64url').toString('utf8'),
         );
+        if (decoded.exp && Date.now() > Number(decoded.exp)) {
+          return null;
+        }
+
         const profile = store.profiles.find(
           (p) =>
             p.id === decoded.sub ||
             p.email.toLowerCase() === String(decoded.email || '').toLowerCase(),
         );
-        if (profile) {
+        if (profile && profile.status !== 'suspendido') {
           const roles = getUserRoles(profile.id);
           return { profile, roles, primaryRole: getPrimaryRole(roles) };
         }
       } catch {
-        // Fallback
+        return null;
       }
     }
   }
   return null;
+}
+
+function hasStaffRole(roles: RoleCode[]) {
+  return roles.some((r) =>
+    ['superadmin', 'admin', 'coordinador', 'soporte'].includes(r),
+  );
 }
 
 export async function GET(
@@ -752,6 +794,13 @@ export async function GET(
   }
 
   if (pathStr === '/admin/users') {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06): Se requiere rol administrativo.' },
+        { status: 403 },
+      );
+    }
     const users = store.profiles.map((profile) => {
       const roles = getUserRoles(profile.id);
       const programs = store.userPrograms
@@ -798,6 +847,13 @@ export async function GET(
   }
 
   if (pathStr === '/admin/moodle-status') {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06).' },
+        { status: 403 },
+      );
+    }
     return NextResponse.json({
       integration: {
         moodleBaseUrl: '/campus',
@@ -809,10 +865,21 @@ export async function GET(
   }
 
   if (pathStr === '/admin/audit-logs') {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06).' },
+        { status: 403 },
+      );
+    }
     return NextResponse.json({ auditLogs: store.auditLogs });
   }
 
   if (pathStr === '/campus/grades') {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx) {
+      return NextResponse.json({ message: 'No autenticado' }, { status: 401 });
+    }
     const courseId = Number(req.nextUrl.searchParams.get('courseId') || 101);
     try {
       const { data: dbGrades } = await supabase
@@ -853,9 +920,17 @@ export async function GET(
       // Fallback a memoria si no hay conexión momentánea
     }
 
-    const grades = store.courseGrades.filter(
-      (g) => g.moodleCourseId === courseId,
-    );
+    const isTeacherOrAdmin =
+      ctx.roles.includes('profesor') ||
+      ctx.roles.includes('admin') ||
+      ctx.roles.includes('superadmin');
+
+    const grades = store.courseGrades.filter((g) => {
+      if (g.moodleCourseId !== courseId) return false;
+      if (isTeacherOrAdmin) return true;
+      return g.email.toLowerCase() === ctx.profile.email.toLowerCase();
+    });
+
     return NextResponse.json({ grades });
   }
 
@@ -968,6 +1043,13 @@ export async function POST(
   }
 
   if (pathStr === '/admin/enrollments') {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06).' },
+        { status: 403 },
+      );
+    }
     const { user_id, course_mapping_id, moodle_role = 'student' } = body;
     const course =
       COURSE_MAPPINGS.find((c) => c.id === course_mapping_id) ||
@@ -994,6 +1076,13 @@ export async function POST(
   }
 
   if (pathStr.endsWith('/sync-moodle')) {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06).' },
+        { status: 403 },
+      );
+    }
     const userId = params.slug[2];
     const profile = store.profiles.find((p) => p.id === userId);
     if (profile) {
@@ -1136,6 +1225,13 @@ export async function PATCH(
   const body = await req.json().catch(() => ({}));
 
   if (pathStr.startsWith('/admin/users/')) {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06).' },
+        { status: 403 },
+      );
+    }
     const userId = params.slug[2];
     const profile = store.profiles.find((p) => p.id === userId);
     if (profile) {
@@ -1288,11 +1384,18 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { slug: string[] } },
 ) {
   const pathStr = '/' + (params.slug || []).join('/');
   if (pathStr.startsWith('/admin/enrollments/')) {
+    const ctx = resolveUserFromRequest(req);
+    if (!ctx || !hasStaffRole(ctx.roles)) {
+      return NextResponse.json(
+        { message: 'Acceso denegado por RBAC (CA-06).' },
+        { status: 403 },
+      );
+    }
     const enrollmentId = params.slug[2];
     store.enrollments = store.enrollments.filter((e) => e.id !== enrollmentId);
     return NextResponse.json({ revoked: true, enrollmentId });
