@@ -505,6 +505,205 @@ function CampusMoodleContent() {
           </div>
         )}
 
+        {/* PANEL DIRECTO HABILITADO PARA PONER CALIFICACIONES EN MOODLE */}
+        <section className="bg-white rounded-2xl border-2 border-[#0066ff]/30 p-6 sm:p-8 shadow-md space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-emerald-100 text-emerald-900">
+                {isTeacher
+                  ? '✔ Modo Profesor Habilitado · Captura y Edición de Calificaciones Activa'
+                  : '📊 Boleta del Alumno en Moodle'}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+                {isTeacher
+                  ? `📝 Captura de Calificaciones — ${courseTitle}`
+                  : `📊 Mis Calificaciones — ${courseTitle}`}
+              </h2>
+              <p className="text-xs text-slate-600 mt-0.5">
+                {isTeacher
+                  ? 'Escribe o modifica la calificación de Tarea (0-100), Cuestionario (0-100), Avance (%) y Retroalimentación de cada alumno y pulsa "Guardar Calificación".'
+                  : 'Aquí aparecen las calificaciones y comentarios que tu profesor registra en Moodle.'}
+              </p>
+            </div>
+          </div>
+
+          {taskSavedMsg && (
+            <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-extrabold">
+              {taskSavedMsg}
+            </div>
+          )}
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-50 text-xs font-extrabold uppercase text-slate-600">
+                  <th className="py-3 px-4">Alumno Matriculado</th>
+                  <th className="py-3 px-4">Tarea (0 - 100)</th>
+                  <th className="py-3 px-4">Cuestionario (0 - 100)</th>
+                  <th className="py-3 px-4">Avance (%)</th>
+                  <th className="py-3 px-4">Promedio Final</th>
+                  <th className="py-3 px-4">Retroalimentación Docente</th>
+                  {isTeacher && <th className="py-3 px-4">Guardar en Moodle</th>}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {studentGrades
+                  .filter((st) =>
+                    isTeacher
+                      ? true
+                      : st.email.toLowerCase() === profile.email.toLowerCase(),
+                  )
+                  .map((st) => {
+                    const avg = Math.round((st.taskGrade + st.quizGrade) / 2);
+                    return (
+                      <tr key={st.email} className="hover:bg-slate-50/80">
+                        <td className="py-3.5 px-4">
+                          <div className="font-extrabold text-slate-900">
+                            {st.name}
+                          </div>
+                          <div className="text-xs font-mono text-slate-500">
+                            {st.email}
+                          </div>
+                        </td>
+
+                        <td className="py-3.5 px-4">
+                          {isTeacher ? (
+                            <input
+                              type="number"
+                              min={0}
+                              max={100}
+                              value={st.taskGrade}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setStudentGrades((prev) =>
+                                  prev.map((item) =>
+                                    item.email.toLowerCase() ===
+                                    st.email.toLowerCase()
+                                      ? { ...item, taskGrade: val }
+                                      : item,
+                                  ),
+                                );
+                              }}
+                              className="w-20 rounded-lg border-2 border-sky-300 focus:border-[#0066ff] px-2.5 py-1.5 text-sm font-extrabold text-center bg-white"
+                            />
+                          ) : (
+                            <span className="font-extrabold text-slate-900">
+                              {st.taskGrade} / 100
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-3.5 px-4">
+                          {isTeacher ? (
+                            <input
+                              type="number"
+                              min={0}
+                              max={100}
+                              value={st.quizGrade}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setStudentGrades((prev) =>
+                                  prev.map((item) =>
+                                    item.email.toLowerCase() ===
+                                    st.email.toLowerCase()
+                                      ? { ...item, quizGrade: val }
+                                      : item,
+                                  ),
+                                );
+                              }}
+                              className="w-20 rounded-lg border-2 border-sky-300 focus:border-[#0066ff] px-2.5 py-1.5 text-sm font-extrabold text-center bg-white"
+                            />
+                          ) : (
+                            <span className="font-extrabold text-slate-900">
+                              {st.quizGrade} / 100
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-3.5 px-4">
+                          {isTeacher ? (
+                            <input
+                              type="number"
+                              min={0}
+                              max={100}
+                              value={st.progress}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setStudentGrades((prev) =>
+                                  prev.map((item) =>
+                                    item.email.toLowerCase() ===
+                                    st.email.toLowerCase()
+                                      ? { ...item, progress: val }
+                                      : item,
+                                  ),
+                                );
+                              }}
+                              className="w-20 rounded-lg border-2 border-sky-300 focus:border-[#0066ff] px-2.5 py-1.5 text-sm font-extrabold text-center bg-white"
+                            />
+                          ) : (
+                            <span className="font-bold text-[#0066ff]">
+                              {st.progress}%
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-3.5 px-4">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-extrabold whitespace-nowrap ${
+                              avg >= 70
+                                ? 'bg-emerald-100 text-emerald-900'
+                                : 'bg-rose-100 text-rose-900'
+                            }`}
+                          >
+                            {avg} / 100 ({avg >= 70 ? 'Aprobado' : 'Reprobado'})
+                          </span>
+                        </td>
+
+                        <td className="py-3.5 px-4 min-w-[220px]">
+                          {isTeacher ? (
+                            <input
+                              type="text"
+                              value={st.feedback}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setStudentGrades((prev) =>
+                                  prev.map((item) =>
+                                    item.email.toLowerCase() ===
+                                    st.email.toLowerCase()
+                                      ? { ...item, feedback: val }
+                                      : item,
+                                  ),
+                                );
+                              }}
+                              placeholder="Escribe retroalimentación..."
+                              className="w-full rounded-lg border-2 border-sky-300 focus:border-[#0066ff] px-3 py-1.5 text-xs text-slate-800 bg-white"
+                            />
+                          ) : (
+                            <span className="text-xs text-slate-700">
+                              {st.feedback}
+                            </span>
+                          )}
+                        </td>
+
+                        {isTeacher && (
+                          <td className="py-3.5 px-4">
+                            <button
+                              type="button"
+                              onClick={() => handleTeacherSaveGrade(st)}
+                              className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#0066ff] hover:bg-blue-700 text-white shadow-sm transition whitespace-nowrap"
+                            >
+                              💾 Guardar Calificación
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         {/* Navegación interna del Aula Moodle (Sección 8.1 Contenido mínimo requerido) */}
         <div className="bg-white rounded-2xl p-3 shadow-sm border border-slate-200 flex flex-wrap gap-2">
           {[

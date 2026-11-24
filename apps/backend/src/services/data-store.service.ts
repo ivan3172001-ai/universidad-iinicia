@@ -2073,9 +2073,13 @@ export class DataStoreService {
       feedback: string;
     },
   ) {
-    if (!actorCtx.roles.includes('profesor')) {
+    if (
+      !actorCtx.roles.includes('profesor') &&
+      !actorCtx.roles.includes('admin') &&
+      !actorCtx.roles.includes('superadmin')
+    ) {
       throw new ForbiddenException(
-        'Solo los usuarios con rol Profesor (Teacher en Moodle) pueden registrar o modificar calificaciones de alumnos (Sección 10 y CA-13).',
+        'Solo los usuarios con rol Profesor o Administrador pueden registrar o modificar calificaciones de alumnos (CA-13).',
       );
     }
 
